@@ -10,7 +10,7 @@ def generate_user_crossdiff(data_df, hm_click):
     xdata = ""
     ydata = ""
     zdata = ""
-    text = filtered_data['Album']
+    text = ""
 
     if hm_click is not None:
         user1 = hm_click["points"][0]["x"]
@@ -18,9 +18,21 @@ def generate_user_crossdiff(data_df, hm_click):
         xdata = filtered_data[user1]
         ydata = filtered_data[user2]
         zdata = filtered_data['AVG']
+        text = (
+            filtered_data["Artist"]
+            + " - "
+            + "<i>"
+            + filtered_data["Album"]
+            + "</i> ("
+            + filtered_data["Year"].map(str)
+            + ")<br> Average: "
+            + filtered_data["AVG"].map(str)
+            + " (from "
+            + filtered_data["Votes"].map(str)
+            + " votes)"
+        )
 
-    # no worky
-    hovertemplate = "<b> %{y} - %{x} <br> Taste similarity: <br> %{text}"
+    hovertemplate = "<b> Album: </b> <br> %{text}<extra></extra>"
 
     data = [
         dict(

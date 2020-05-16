@@ -32,7 +32,8 @@ def tab_users():
             dbc.Col(
                 id="user_heatmap_card",
                 children=[
-                    html.B("Tastemap"),
+                    html.Hr(),
+                    html.H3("Tastemap"),
                     html.Hr(),
                     dcc.Graph(
                         id="cross_taste_map",
@@ -44,8 +45,10 @@ def tab_users():
         dbc.Row(
             dbc.Col(
                 id="user_crossdetail_card",
+                # className="d-flex justify-content-center",
                 children=[
-                    html.B("Tastedetail"),
+                    html.Hr(),
+                    html.H3("Tastedetail"),
                     html.Hr(),
                     dcc.Graph(id="taste_detail",
                               figure={'layout': graph_custom}),
