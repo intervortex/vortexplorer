@@ -1,6 +1,7 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, ClientsideFunction
 
 import numpy as np
@@ -16,7 +17,7 @@ app = dash.Dash(
     __name__,
     meta_tags=[{"name": "viewport",
                 "content": "width=device-width, initial-scale=1"}],
-    # assets_external_path="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css",
+    external_stylesheets=[dbc.themes.CYBORG],
 )
 
 server = app.server
@@ -36,32 +37,43 @@ users = ['goaticorn',
          'Goatickvillian']
 
 
-def build_tabs():
-    return html.Div(
-        id="tabs",
-        className="tabs",
+def header():
+    return dbc.NavbarSimple(
         children=[
-            dcc.Tabs(
-                id="app-tabs",
-                value="tab2",
-                className="custom-tabs",
-                children=[
-                    dcc.Tab(
-                        id="general-tab",
-                        label="General Overview",
-                        value="tab1",
-                        className="custom-tab",
-                        selected_className="custom-tab--selected",
-                    ),
-                    dcc.Tab(
-                        id="user-tab",
-                        label="CrossTaste",
-                        value="tab2",
-                        className="custom-tab",
-                        selected_className="custom-tab--selected",
-                    ),
-                ],
+            html.P("Select Spreadsheet"),
+            dcc.Dropdown(
+                id="spreadsheet-select",
+                options=[{"label": i, "value": i} for i in spreadsheet_list],
+                value=spreadsheet_list[0],
             )
+        ],
+        brand="Vortexplorer",
+        brand_href="#",
+        color="warning",
+        dark=True,
+    )
+
+
+def build_tabs():
+    return dcc.Tabs(
+        id="app-tabs",
+        value="tab2",
+        className="custom-tabs",
+        children=[
+            dcc.Tab(
+                id="general-tab",
+                label="General Overview",
+                value="tab1",
+                className="custom-tab",
+                selected_className="custom-tab--selected",
+            ),
+            dcc.Tab(
+                id="user-tab",
+                label="CrossTaste",
+                value="tab2",
+                className="custom-tab",
+                selected_className="custom-tab--selected",
+            ),
         ],
     )
 
@@ -70,18 +82,38 @@ app.layout = html.Div(
     id="outer-wrapper",
     children=[
         dcc.Store(id="spreadsheet"),
-        html.Div(
+        header(),
+        dbc.Container(
             id="app-container",
             children=[
-                build_tabs(),
-                # Main app
-                html.Div(id="app-content"),
+                dbc.Row(
+                    dbc.Col(
+                        build_tabs(),
+                    )
+                ),
+                dbc.Row(
+                    dbc.Col(
+                        id="app-content"
+                    )
+                )
             ],
         ),
         # generate_modal(),
     ],
 )
 
+# Data
+
+
+@app.callback(
+    Output("spreadsheet", "data"),
+    [
+        Input("well_statuses", "value"),
+        Input("well_types", "value"),
+        Input("year_slider", "value"),
+    ],
+)
+# Tabs
 @app.callback(Output('app-content', 'children'),
               [Input('app-tabs', 'value')])
 def render_content(tab):
@@ -90,7 +122,7 @@ def render_content(tab):
             html.H3('Tab content 1')
         ])
     elif tab == 'tab2':
-        return html.Div(tab_users(spreadsheet_list))
+        return html.Div(tab_users())
 
 
 @app.callback(
@@ -105,12 +137,12 @@ def update_heatmap(spreadsheet, hm_click):
 
     reset = False
     # Find which one has been triggered
-    ctx = dash.callback_context
+    # ctx = dash.callback_context
 
-    if ctx.triggered:
-        prop_id = ctx.triggered[0]["prop_id"].split(".")[0]
-        if prop_id == "reset-btn":
-            reset = True
+    # if ctx.triggered:
+    #     prop_id = ctx.triggered[0]["prop_id"].split(".")[0]
+    #     if prop_id == "reset-btn":
+    #         reset = True
 
     # Return to original hm(no colored annotation) by resetting
     return generate_user_heatmap(data_df, users, spreadsheet, hm_click, reset)

@@ -1,5 +1,5 @@
 import numpy as np
-from src.palette import palette
+from src.palette import palette, graph_custom
 
 
 def generate_user_heatmap(data_df, users, spreadsheet, hm_click, reset):
@@ -82,7 +82,6 @@ def generate_user_heatmap(data_df, users, spreadsheet, hm_click, reset):
             showscale=False,
             colorscale='inferno',
             reversescale=True,
-            # colorscale=[[0, "#caf3ff"], [1, "#2c82ff"]],
         )
     ]
 
@@ -109,7 +108,6 @@ def generate_user_heatmap(data_df, users, spreadsheet, hm_click, reset):
         ),
         hovermode="closest",
         showlegend=False,
-        paper_bgcolor=palette['black'],
-        plot_bgcolor=palette['black'],
     )
+    layout.update(graph_custom)
     return {"data": data, "layout": layout}

@@ -1,4 +1,4 @@
-from src.palette import palette
+from src.palette import palette, graph_custom
 
 
 def generate_user_crossdiff(data_df, hm_click):
@@ -46,7 +46,6 @@ def generate_user_crossdiff(data_df, hm_click):
         legend={'x': 0, 'y': 1},
         hovermode='closest',
         showlegend=False,
-        paper_bgcolor=palette['black'],
-        plot_bgcolor=palette['black'],
     )
+    layout.update(graph_custom)
     return {"data": data, "layout": layout}

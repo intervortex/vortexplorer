@@ -1,7 +1,8 @@
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_bootstrap_components as dbc
 
-from src.palette import palette
+from src.palette import palette, graph_custom
 
 
 def user_description_card():
@@ -17,58 +18,37 @@ def user_description_card():
     )
 
 
-def user_control_card(spreadsheet_list):
-    return html.Div(
-        id="control-card",
-        children=[
-            html.P("Select Spreadsheet"),
-            dcc.Dropdown(
-                id="spreadsheet-select",
-                options=[{"label": i, "value": i} for i in spreadsheet_list],
-                value=spreadsheet_list[0],
-            ),
-        ],
-    )
-
-
-def tab_users(spreadsheet_list):
+def tab_users():
     return [
-        html.Div(
-            id="left-column",
-            className="four columns",
-            children=[
-                user_description_card(),
-                user_control_card(spreadsheet_list)
-            ]
+        dbc.Row(
+            dbc.Col(
+                children=[
+                    user_description_card(),
+                ]
+            )
         ),
-        # Right column
-        html.Div(
-            id="right-column",
-            className="eight columns",
-            children=[
-                # Similarity Heatmap
-                html.Div(
-                    id="user_heatmap_card",
-                    children=[
-                        html.B("Tastemap"),
-                        html.Hr(),
-                        dcc.Graph(
-                            id="cross_taste_map",
-                            figure={
-                                'layout': {
-                                    "paper_bgcolor": palette['black'],
-                                    "plot_bgcolor":palette['black'],
-                                }}),
-                    ],
-                ),
-                # Crossreference chart
-                html.Div(
-                    id="user_crossdetail_card",
-                    children=[
-                        html.B("Tastedetail"),
-                        html.Hr(),
-                        dcc.Graph(id="taste_detail"),
-                    ],
-                ),
-            ],
+        # Similarity Heatmap
+        dbc.Row(
+            dbc.Col(
+                id="user_heatmap_card",
+                children=[
+                    html.B("Tastemap"),
+                    html.Hr(),
+                    dcc.Graph(
+                        id="cross_taste_map",
+                        figure={'layout': graph_custom}),
+                ],
+            )
+        ),
+        # Crossreference chart
+        dbc.Row(
+            dbc.Col(
+                id="user_crossdetail_card",
+                children=[
+                    html.B("Tastedetail"),
+                    html.Hr(),
+                    dcc.Graph(id="taste_detail",
+                              figure={'layout': graph_custom}),
+                ],
+            )
         )]
