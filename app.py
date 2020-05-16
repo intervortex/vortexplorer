@@ -21,6 +21,7 @@ app = dash.Dash(
 )
 
 server = app.server
+app.title = "Vortexplorer"
 app.config.suppress_callback_exceptions = True
 app.scripts.config.serve_locally = False
 

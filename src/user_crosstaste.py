@@ -10,6 +10,7 @@ def generate_user_crossdiff(data_df, hm_click):
     xdata = ""
     ydata = ""
     zdata = ""
+    text = filtered_data['Album']
 
     if hm_click is not None:
         user1 = hm_click["points"][0]["x"]
@@ -35,13 +36,34 @@ def generate_user_crossdiff(data_df, hm_click):
                 'color': zdata,
                 'colorscale': 'inferno',
             },
-            text=zdata,
-            text2=zdata,
+            text=text,
         )
     ]
     layout = dict(
-        xaxis={'title': user1},
-        yaxis={'title': user2},
+        # TODO: do not do like this
+        width=800,
+        height=800,
+        font=dict(family="Open Sans", color=palette['light'], size=18),
+        xaxis={
+            'title': user1,
+            "range": [0, 10.5],
+            "automargin": True,
+            "tickmode": 'linear',
+            "tick0": 0.0,
+            "dtick": 1.0,
+            "tickfont": dict(family="sans-serif", color=palette['light']),
+            'tickcolor': palette['light'],
+        },
+        yaxis={
+            'title': user2,
+            "range": [0, 10.5],
+            "automargin": True,
+            "tickmode": 'linear',
+            "tick0": 0.0,
+            "dtick": 1.0,
+            "tickfont": dict(family="sans-serif", color=palette['light']),
+            'tickcolor': palette['light'],
+        },
         margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
         legend={'x': 0, 'y': 1},
         hovermode='closest',
