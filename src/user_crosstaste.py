@@ -18,8 +18,8 @@ def generate_user_crossdiff(data_df, hm_click):
         ydata = filtered_data[user2]
         zdata = filtered_data['AVG']
 
-        # no worky
-        hovertemplate = "<b> %{y} - %{x} <br> Taste similarity: <br> %{text2}"
+    # no worky
+    hovertemplate = "<b> %{y} - %{x} <br> Taste similarity: <br> %{text}"
 
     data = [
         dict(
