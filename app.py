@@ -2,7 +2,8 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
-from dash.dependencies import Input, Output, ClientsideFunction
+from dash.dependencies import Input, Output, State
+from dash.exceptions import PreventUpdate
 
 import numpy as np
 import pandas as pd
@@ -104,7 +105,7 @@ def build_tabs():
 app.layout = html.Div(
     id="outer-wrapper",
     children=[
-        dcc.Store(id="spreadsheet-data"),
+        dcc.Store(id="spreadsheet_data"),
         header(),
         dbc.Container(
             id="app-container",
@@ -125,18 +126,6 @@ app.layout = html.Div(
     ],
 )
 
-
-# Data
-@app.callback(
-    Output("spreadsheet-data", "data"),
-    [
-        Input("spreadsheet-select", "value"),
-    ],
-)
-def get_spreadsheet_data(spreadsheet_name):
-    return data_df.to_dict()
-
-
 # Tabs
 @app.callback(Output('app-content', 'children'),
               [Input('app-tabs', 'value')])
@@ -149,6 +138,17 @@ def render_content(tab):
         return tab_cross_user()
 
 
+# Data
+@app.callback(
+    Output("spreadsheet_data", "data"),
+    [
+        Input("spreadsheet-select", "value"),
+    ],
+)
+def get_spreadsheet_data(spreadsheet_name):
+    return data_df.to_dict()
+
+
 # Data tab 1
 @app.callback(
     [
@@ -156,43 +156,45 @@ def render_content(tab):
         Output("cardText2", "children"),
         Output("cardText3", "children"),
     ],
-    [Input("spreadsheet-select", "value")],
+    [Input("spreadsheet_data", 'modified_timestamp')],
+    [State("spreadsheet_data", 'data')]
 )
-def update_text(data):
-    # Just this for now
-    data = data_df
+def update_text(ts, data):
+
+    if ts is None:
+        raise PreventUpdate
+
+    df = pd.DataFrame(data)
 
     return (
-        data['Album'].count(),
-        str(len(data['Artist'].unique())),
-        f"{data['AVG'].mean(): .3f}"
+        df['Album'].count(),
+        df['Artist'].nunique(),
+        f"{df['AVG'].mean(): .3f}"
     )
 
 
 @app.callback(
     Output("overview_year", "figure"),
-    [
-        Input("spreadsheet-select", "value"),
-    ],
+    [Input("spreadsheet_data", 'modified_timestamp')],
+    [State("spreadsheet_data", 'data')]
 )
-def update_overview_year(spreadsheet):
+def update_overview_year(ts, data):
 
-    # Just this for now
-    data = data_df
+    if ts is None:
+        raise PreventUpdate
 
     return generate_overview_year(data)
 
 
 @app.callback(
     Output("overview_stats", "figure"),
-    [
-        Input("spreadsheet-select", "value"),
-    ],
+    [Input("spreadsheet_data", 'modified_timestamp')],
+    [State("spreadsheet_data", 'data')]
 )
-def update_overview_year(spreadsheet):
+def update_overview_stats(ts, data):
 
-    # Just this for now
-    data = data_df
+    if ts is None:
+        raise PreventUpdate
 
     return generate_overview_stats(data)
 
@@ -200,55 +202,32 @@ def update_overview_year(spreadsheet):
 @app.callback(
     Output("overview_year_tbl", "data"),
     [
-        Input("spreadsheet-select", "value"),
+        Input("spreadsheet_data", 'modified_timestamp'),
         Input("overview_year", "selectedData"),
+        Input("overview_stats", "selectedData"),
     ],
+    [State("spreadsheet_data", 'data')]
 )
-def update_overview_year_tbl(data, selection):
+def update_overview_year_tbl(ts, sel_year, sel_stats, data):
 
-    # Just this for now
-    data = data_df
+    if ts is None:
+        raise PreventUpdate
 
-    return generate_overview_year_tbl(data, selection)
+    return generate_overview_year_tbl(data, sel_year, sel_stats)
 
 
 # Data tab 2
 @app.callback(
-    Output("cross_taste_map", "figure"),
-    [
-        Input("spreadsheet-select", "value"),
-        Input("cross_taste_map", "clickData"),
-    ],
-)
-def update_heatmap(spreadsheet, click):
-
-    # Just this for now
-    data = data_df
-
-    return generate_crossuser_heatmap(data, users, click, False)
-
-
-@app.callback(
-    Output("taste_detail", "figure"),
-    [Input("cross_taste_map", "clickData")],
-)
-def update_detail_taste(hm_click):
-
-    # Return to original hm(no colored annotation) by resetting
-    return generate_crossuser_corr(data_df, hm_click)
-
-
-# Data tab 3
-@app.callback(
     Output("user_overview", "figure"),
     [
-        Input("spreadsheet-select", "value"),
+        Input("spreadsheet_data", 'modified_timestamp'),
     ],
+    [State("spreadsheet_data", 'data')]
 )
-def update_user_overview(spreadsheet):
+def update_user_overview(ts, data):
 
-    # Just this for now
-    data = data_df
+    if ts is None:
+        raise PreventUpdate
 
     return generate_user_overview(data, users)
 
@@ -259,10 +238,14 @@ def update_user_overview(spreadsheet):
         Output("user_breakdown_select", "value"),
     ],
     [
-        Input("spreadsheet-select", "value"),
+        Input("spreadsheet_data", 'modified_timestamp'),
     ],
+    [State("spreadsheet_data", 'data')]
 )
-def update_user_breakdown_value(spreadsheet):
+def update_user_breakdown_value(ts, data):
+
+    if ts is None:
+        raise PreventUpdate
 
     return [{'label': user, "value": user} for user in users], users[0]
 
@@ -270,16 +253,50 @@ def update_user_breakdown_value(spreadsheet):
 @app.callback(
     Output("user_breakdown", "figure"),
     [
-        Input("spreadsheet-select", "value"),
+        Input("spreadsheet_data", 'modified_timestamp'),
         Input("user_breakdown_select", "value"),
     ],
+    [State("spreadsheet_data", 'data')]
 )
-def update_user_breakdown(spreadsheet, users):
+def update_user_breakdown(ts, users, data):
 
-    # Just this for now
-    data = data_df
+    if ts is None:
+        raise PreventUpdate
 
     return generate_user_breakdown(data, users)
+
+
+# Data tab 3
+@app.callback(
+    Output("cross_taste_map", "figure"),
+    [
+        Input("spreadsheet_data", 'modified_timestamp'),
+        Input("cross_taste_map", "clickData"),
+    ],
+    [State("spreadsheet_data", 'data')]
+)
+def update_heatmap(ts, click, data):
+
+    if ts is None:
+        raise PreventUpdate
+
+    return generate_crossuser_heatmap(data, users, click, False)
+
+
+@app.callback(
+    Output("taste_detail", "figure"),
+    [
+        Input("spreadsheet_data", 'modified_timestamp'),
+        Input("cross_taste_map", "clickData"),
+    ],
+    [State("spreadsheet_data", 'data')]
+)
+def update_detail_taste(ts, hm_click, data):
+
+    if ts is None:
+        raise PreventUpdate
+
+    return generate_crossuser_corr(data, hm_click)
 
 
 # Run the server

@@ -1,13 +1,14 @@
 import copy
 import numpy as np
+import pandas as pd
 from src.palette import palette, graph_custom
 
 
-def generate_crossuser_heatmap(data_df, users, hm_click, reset):
+def generate_crossuser_heatmap(data, users, hm_click, reset):
     """
     """
 
-    dff = data_df
+    dff = pd.DataFrame(data)
 
     x_axis = ['AVG'] + users
     y_axis = ['AVG'] + users

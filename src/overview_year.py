@@ -4,9 +4,10 @@ import pandas as pd
 from src.palette import palette, graph_custom
 
 
-def generate_overview_year(data_df):
+def generate_overview_year(data):
 
-    dff = data_df
+    dff = pd.DataFrame(data)
+
     dfy = dff[["AVG", "Year"]]
     dfy.index = pd.to_datetime(dfy["Year"], format="%Y")
     dfy = dfy.resample('A').agg({'Year': 'count', 'AVG': 'mean'})
@@ -40,13 +41,19 @@ def generate_overview_year(data_df):
     return {'data': data, 'layout': layout}
 
 
-def generate_overview_year_tbl(data, selection):
+def generate_overview_year_tbl(data, sel_year, sel_stats):
 
-    if selection is None:
-        dff = data
-    else:
-        start = int(selection["range"]['x'][1][0:4])
-        end = int(selection["range"]['x'][0][0:4])
-        dff = data[data['Year'].between(start, end)]
+    dff = pd.DataFrame(data)
+
+    if sel_year is not None:
+        start = int(sel_year["range"]['x'][1][0:4])
+        end = int(sel_year["range"]['x'][0][0:4])
+        dff = dff[dff['Year'].between(start, end)]
+
+    if sel_stats is not None:
+        print(sel_stats)
+        start = sel_stats["range"]['x'][0]
+        end = sel_stats["range"]['x'][1]
+        dff = dff[dff['AVG'].between(start, end)]
 
     return dff[["Year", "Artist", "Album", "AVG", "Votes"]].to_dict('records')

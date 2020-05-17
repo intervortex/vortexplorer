@@ -1,11 +1,12 @@
-import plotly.graph_objects as go
 import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
 from src.palette import palette, graph_custom
 
 
-def generate_user_overview(data_df, users):
+def generate_user_overview(data, users):
 
-    dff = data_df
+    dff = pd.DataFrame(data)
 
     # generate an array of rainbow colors by fixing the saturation and lightness of the HSL
     # representation of colour and marching around the hue.

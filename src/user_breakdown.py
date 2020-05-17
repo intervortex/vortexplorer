@@ -1,11 +1,12 @@
+import pandas as pd
 import plotly.figure_factory as ff
 
 from src.palette import palette, graph_custom
 
 
-def generate_user_breakdown(data_df, users):
+def generate_user_breakdown(data, users):
 
-    dff = data_df
+    dff = pd.DataFrame(data)
 
     hist_data = []
     group_labels = []

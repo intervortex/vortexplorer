@@ -55,7 +55,7 @@ def tab_overview():
                                 html.H4("Card title",
                                         id="cardText3",
                                         className="card-title"),
-                                html.P("Average of votes",
+                                html.P("Vote average",
                                        className="card-text"),
                             ]),
                         ]),

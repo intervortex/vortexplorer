@@ -1,11 +1,13 @@
 import copy
 
+import pandas as pd
+
 from src.palette import palette, graph_custom
 
 
-def generate_crossuser_corr(data_df, hm_click):
+def generate_crossuser_corr(data, hm_click):
 
-    dff = data_df
+    dff = pd.DataFrame(data)
 
     user1 = ""
     user2 = ""

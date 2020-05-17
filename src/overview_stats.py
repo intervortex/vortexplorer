@@ -1,11 +1,12 @@
+import pandas as pd
 import plotly.figure_factory as ff
 
 from src.palette import palette, graph_custom
 
 
-def generate_overview_stats(data_df):
+def generate_overview_stats(data):
 
-    dff = data_df
+    dff = pd.DataFrame(data)
 
     hist_data = [dff["AVG"]]
     group_labels = ["Average"]
@@ -27,6 +28,8 @@ def generate_overview_stats(data_df):
             'xanchor': 'center',
         },
         font=dict(family="Open Sans", color=palette['light']),
+        dragmode='select',
+        selectdirection='h',
     )
 
     return fig
