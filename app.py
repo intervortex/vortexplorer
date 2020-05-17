@@ -8,7 +8,9 @@ import numpy as np
 import pandas as pd
 import pathlib
 
-from src.tab_cross_user import tab_users
+from src.tab_overview import tab_overview
+from src.tab_cross_user import tab_cross_user
+from src.tab_user import tab_user
 from src.user_heatmap import generate_user_heatmap
 from src.user_crosstaste import generate_user_crossdiff
 
@@ -89,7 +91,7 @@ def build_tabs():
 app.layout = html.Div(
     id="outer-wrapper",
     children=[
-        dcc.Store(id="spreadsheet"),
+        dcc.Store(id="spreadsheet-data"),
         header(),
         dbc.Container(
             id="app-container",
@@ -109,29 +111,31 @@ app.layout = html.Div(
     ],
 )
 
+
 # Data
-
-
 @app.callback(
-    Output("spreadsheet", "data"),
+    Output("spreadsheet-data", "data"),
     [
-        Input("well_statuses", "value"),
-        Input("well_types", "value"),
-        Input("year_slider", "value"),
+        Input("spreadsheet-select", "value"),
     ],
 )
+def get_spreadsheet_data(spreadsheet_name):
+    return data_df.to_dict()
+
+
 # Tabs
 @app.callback(Output('app-content', 'children'),
               [Input('app-tabs', 'value')])
 def render_content(tab):
     if tab == 'tab1':
-        return html.Div([
-            html.H3('Tab content 1')
-        ])
+        return tab_overview()
     elif tab == 'tab2':
-        return html.Div(tab_users())
+        return tab_cross_user()
+    elif tab == 'tab3':
+        return tab_user()
 
 
+# Data
 @app.callback(
     Output("cross_taste_map", "figure"),
     [
@@ -142,17 +146,10 @@ def render_content(tab):
 )
 def update_heatmap(spreadsheet, hm_click):
 
-    reset = False
-    # Find which one has been triggered
-    # ctx = dash.callback_context
+    # Just this for now
+    data = data_df
 
-    # if ctx.triggered:
-    #     prop_id = ctx.triggered[0]["prop_id"].split(".")[0]
-    #     if prop_id == "reset-btn":
-    #         reset = True
-
-    # Return to original hm(no colored annotation) by resetting
-    return generate_user_heatmap(data_df, users, spreadsheet, hm_click, reset)
+    return generate_user_heatmap(data, users, hm_click, False)
 
 
 @app.callback(

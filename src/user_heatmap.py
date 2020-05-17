@@ -2,14 +2,14 @@ import numpy as np
 from src.palette import palette, graph_custom
 
 
-def generate_user_heatmap(data_df, users, spreadsheet, hm_click, reset):
+def generate_user_heatmap(data_df, users, hm_click, reset):
     """
     """
 
     filtered_data = data_df
 
-    x_axis = users
-    y_axis = users
+    x_axis = ['AVG'] + users
+    y_axis = ['AVG'] + users
 
     user1 = ""
     user2 = ""
@@ -20,10 +20,10 @@ def generate_user_heatmap(data_df, users, spreadsheet, hm_click, reset):
         user2 = hm_click["points"][0]["y"]
 
         # Add shape
-        x0 = x_axis.index(user1) / len(users)
-        x1 = x0 + 1 / len(users)
-        y0 = y_axis.index(user2) / len(users)
-        y1 = y0 + 1 / len(users)
+        x0 = x_axis.index(user1) / len(x_axis)
+        x1 = x0 + 1 / len(x_axis)
+        y0 = y_axis.index(user2) / len(y_axis)
+        y1 = y0 + 1 / len(y_axis)
 
         shapes = [
             dict(
@@ -39,12 +39,12 @@ def generate_user_heatmap(data_df, users, spreadsheet, hm_click, reset):
         ]
 
     # Get z value : sum(number of records) based on x, y,
-    crossref = np.zeros([len(users), len(users)])
+    crossref = np.zeros([len(x_axis), len(y_axis)])
 
     annotations = []
 
-    for ind1, col1 in enumerate(users):
-        for ind2, col2 in enumerate(users):
+    for ind1, col1 in enumerate(x_axis):
+        for ind2, col2 in enumerate(y_axis):
             diff = filtered_data[col1] - filtered_data[col2]
             crossref[ind1, ind2] = np.sum(
                 np.abs(diff.dropna())) / len(diff.dropna())
@@ -79,7 +79,13 @@ def generate_user_heatmap(data_df, users, spreadsheet, hm_click, reset):
             type="heatmap",
             name="",
             hovertemplate=hovertemplate,
-            showscale=False,
+            showscale=True,
+            colorbar=dict(
+                tickmode='array',
+                tickvals=[0, np.max(crossref_adj)],
+                ticktext=['Agree', 'Disagree'],
+                tickfont={'size': 13, 'color': palette['light']},
+            ),
             colorscale='inferno',
             reversescale=True,
         )
