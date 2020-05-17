@@ -47,6 +47,8 @@ def generate_user_crossdiff(data_df, hm_click):
                 'line': {'width': 0.5, 'color': palette['light']},
                 'color': zdata,
                 'colorscale': 'inferno',
+                'showscale':True,
+                'colorbar':{'title': {'text': 'Average'}},
             },
             text=text,
         )
