@@ -1,5 +1,4 @@
-import copy
-import pandas as pd
+import plotly.figure_factory as ff
 
 from src.palette import palette, graph_custom
 
@@ -7,34 +6,23 @@ from src.palette import palette, graph_custom
 def generate_overview_stats(data_df):
 
     dff = data_df
-    dfy = dff[["AVG", "Year"]]
-    dfy.index = pd.to_datetime(dfy["Year"], format="%Y")
-    dfy = dfy.resample('A').agg({'Year': 'count', 'AVG': 'mean'})
 
-    data = [
-        dict(
-            type="bar",
-            x=dfy.index,
-            y=dfy["Year"],
-            name="All years",
-            hovertemplate="<b> %{x}: </b> <br> Albums: %{y} <br> Average: %{marker.color:.2f}<extra></extra>",
-            marker={
-                'color': dfy['AVG'],
-                'showscale':True,
-                'colorbar':{'title': {'text': 'Average'}},
-            },
-            colorscale='inferno'
-        ),
-    ]
-    layout = copy.deepcopy(graph_custom)
-    layout.update(
-        dict(
-            title="Albums throughout the years",
-            yaxis={
-                'title': 'Number of albums',
-            },
-            dragmode='select',
-            selectdirection='h',
-        )
+    hist_data = [dff["AVG"]]
+    group_labels = ["Average"]
+
+    fig = ff.create_distplot(
+        hist_data,
+        group_labels,
+        colors=[palette['light']],
+        bin_size=[0.1],
+        show_rug=False
     )
-    return {'data': data, 'layout': layout}
+
+    # format the layout
+    fig.update_layout(**graph_custom)
+    fig.update_layout(
+        title="Average distribution",
+        font=dict(family="Open Sans", color=palette['light']),
+    )
+
+    return fig

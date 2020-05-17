@@ -11,6 +11,7 @@ import pathlib
 from src.tab_overview import tab_overview
 from src.overview_year import generate_overview_year
 from src.overview_year import generate_overview_year_tbl
+from src.overview_stats import generate_overview_stats
 
 from src.tab_cross_user import tab_cross_user
 from src.crossuser_heatmap import generate_crossuser_heatmap
@@ -90,7 +91,7 @@ def build_tabs():
             ),
             dcc.Tab(
                 id="cross-tab",
-                label="CrossTaste",
+                label="CrossTaste™",
                 value="tab3",
                 className="custom-tab bg-dark",
                 selected_className="custom-tab--selected",
@@ -179,6 +180,20 @@ def update_overview_year(spreadsheet):
     data = data_df
 
     return generate_overview_year(data)
+
+
+@app.callback(
+    Output("overview_stats", "figure"),
+    [
+        Input("spreadsheet-select", "value"),
+    ],
+)
+def update_overview_year(spreadsheet):
+
+    # Just this for now
+    data = data_df
+
+    return generate_overview_stats(data)
 
 
 @app.callback(

@@ -28,7 +28,7 @@ def tab_cross_user():
             className="mt-4",
         ),
         # Similarity Heatmap
-        dbc.Row(
+        dbc.Row([
             dbc.Col(
                 id="user_heatmap_card",
                 children=[
@@ -40,7 +40,7 @@ def tab_cross_user():
                         figure={'layout': graph_custom}),
                 ],
             )
-        ),
+        ]),
         # Crossreference chart
         dbc.Row(
             dbc.Col(

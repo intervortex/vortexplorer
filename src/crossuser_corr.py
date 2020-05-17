@@ -58,9 +58,6 @@ def generate_crossuser_corr(data_df, hm_click):
     layout = copy.deepcopy(graph_custom)
     layout.update(
         dict(
-            # TODO: do not do like this
-            width=800,
-            height=800,
             margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
             font=dict(family="Open Sans", color=palette['light'], size=18),
             xaxis={
