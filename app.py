@@ -57,7 +57,8 @@ def header():
                     options=[{"label": i, "value": i}
                              for i in spreadsheet_list],
                     value=spreadsheet_list[0],
-                )
+                ),
+                style={"width": "200px"},
             )
         ],
         brand=app.title,

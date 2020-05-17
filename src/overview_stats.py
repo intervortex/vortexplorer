@@ -14,14 +14,18 @@ def generate_overview_stats(data_df):
         hist_data,
         group_labels,
         colors=[palette['light']],
-        bin_size=[0.1],
+        bin_size=[0.2],
         show_rug=False
     )
 
     # format the layout
     fig.update_layout(**graph_custom)
     fig.update_layout(
-        title="Average distribution",
+        title={
+            "text": "Average distribution",
+            'x': 0.5,
+            'xanchor': 'center',
+        },
         font=dict(family="Open Sans", color=palette['light']),
     )
 
