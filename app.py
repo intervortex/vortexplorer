@@ -41,7 +41,7 @@ users = ['goaticorn',
 def header():
     return dbc.NavbarSimple(
         children=[
-            html.P("Select Spreadsheet"),
+            dbc.NavItem(dbc.NavLink("Select Spreadsheet", href="#")),
             dcc.Dropdown(
                 id="spreadsheet-select",
                 options=[{"label": i, "value": i} for i in spreadsheet_list],
@@ -63,15 +63,22 @@ def build_tabs():
         children=[
             dcc.Tab(
                 id="general-tab",
-                label="General Overview",
+                label="Spreadsheet",
                 value="tab1",
                 className="custom-tab",
                 selected_className="custom-tab--selected",
             ),
             dcc.Tab(
-                id="user-tab",
+                id="cross-tab",
                 label="CrossTaste",
                 value="tab2",
+                className="custom-tab",
+                selected_className="custom-tab--selected",
+            ),
+            dcc.Tab(
+                id="user-tab",
+                label="Users",
+                value="tab3",
                 className="custom-tab",
                 selected_className="custom-tab--selected",
             ),
@@ -99,7 +106,6 @@ app.layout = html.Div(
                 )
             ],
         ),
-        # generate_modal(),
     ],
 )
 

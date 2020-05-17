@@ -105,6 +105,7 @@ def generate_user_heatmap(data_df, users, spreadsheet, hm_click, reset):
             tickfont=dict(family="sans-serif", color=palette['light']),
             ticksuffix="",
             tickcolor=palette['light'],
+            autorange="reversed"
         ),
         hovermode="closest",
         showlegend=False,
