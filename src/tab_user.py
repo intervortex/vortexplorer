@@ -15,7 +15,12 @@ def tab_user():
                         id="description-card",
                         children=[
                             html.H3(
-                                "User voting details"),
+                                "Member voting details"),
+                            dbc.Card(
+                                """The way each member voted for their albums. """
+                                """First graph shows an overview of everybody. """
+                                """Second graph can be customised to show the vote distribution on a person-by-person basis. """,
+                                body=True, id="intro"),
                         ],
                     ),
                 ]
