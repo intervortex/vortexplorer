@@ -5,27 +5,27 @@ import dash_bootstrap_components as dbc
 from src.palette import palette, graph_custom
 
 
-def user_description_card():
-    return html.Div(
-        id="description-card",
-        children=[
-            html.H3("Keep your friends close and your enemies roasted."),
-            html.Div(
-                id="intro",
-                children="Explore taste similarity between users. Click on the heatmap to see a detailed breakdown.",
-            ),
-        ],
-    )
-
-
-def tab_users():
+def tab_cross_user():
     return [
+        # Explanation and details
         dbc.Row(
             dbc.Col(
                 children=[
-                    user_description_card(),
+                    html.Div(
+                        id="description-card",
+                        children=[
+                            html.H3(
+                                "Keep your friends close and your enemies roasted"),
+                            dbc.Card(
+                                """Explore taste similarity between users. """
+                                """Click on the heatmap to see a detailed breakdown. """
+                                """Values closer to 0 mean a better taste agreement. """,
+                                body=True, id="intro"),
+                        ],
+                    ),
                 ]
-            )
+            ),
+            className="mt-4",
         ),
         # Similarity Heatmap
         dbc.Row(

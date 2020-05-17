@@ -1,16 +1,52 @@
-#app-tabs, #app-tabs .tab {
+
+/* App tabs */
+
+#app-tabs .tab--selected {
+    color: #FFBF00 !important;
+    border-top-color: initial !important;
+}
+
+/* Dropdowns */
+
+.Select-control {
+    color: #a5b1cd;
+}
+
+.Select {
+    color: #a5b1cd;
+}
+
+.Select-menu-outer {
+    background-color: #2f3445;
+    border: 1px solid gray;
+}
+
+.Select div {
+    background-color: #2f3445;
+}
+
+.Select-menu-outer div:hover {
+    background-color: rgba(255, 255, 255, 0.01);
+}
+
+.Select-value-label {
+    color: #a5b1cd !important;
+}
+
+.Select--single > .Select-control .Select-value, .Select-placeholder {
+    border: 1px solid gray;
+    border-radius: 4px;
+}
+
+
+/* #app-tabs, #app-tabs .tab {
     background-color: #000000 !important;
 }
 #app-tabs .tab {
     background-color: #000000;
     color: #E4E4E4;
     border-color: #727272 !important;
-}
-#app-tabs .tab--selected {
-    color: #FFBF00 !important;
-    border-top-color: initial !important;
-}
-
+} */
 
 /* body {
     color: #E4E4E4 !important;

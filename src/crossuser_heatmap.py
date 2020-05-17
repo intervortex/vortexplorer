@@ -1,12 +1,13 @@
+import copy
 import numpy as np
 from src.palette import palette, graph_custom
 
 
-def generate_user_heatmap(data_df, users, hm_click, reset):
+def generate_crossuser_heatmap(data_df, users, hm_click, reset):
     """
     """
 
-    filtered_data = data_df
+    dff = data_df
 
     x_axis = ['AVG'] + users
     y_axis = ['AVG'] + users
@@ -22,7 +23,7 @@ def generate_user_heatmap(data_df, users, hm_click, reset):
         # Add shape
         x0 = x_axis.index(user1) / len(x_axis)
         x1 = x0 + 1 / len(x_axis)
-        y0 = y_axis.index(user2) / len(y_axis)
+        y0 = 1 - (y_axis.index(user2) + 1) / len(y_axis)
         y1 = y0 + 1 / len(y_axis)
 
         shapes = [
@@ -34,7 +35,7 @@ def generate_user_heatmap(data_df, users, hm_click, reset):
                 x1=x1,
                 y0=y0,
                 y1=y1,
-                line=dict(color="#ff6347"),
+                line=dict(color=palette['black']),
             )
         ]
 
@@ -45,7 +46,7 @@ def generate_user_heatmap(data_df, users, hm_click, reset):
 
     for ind1, col1 in enumerate(x_axis):
         for ind2, col2 in enumerate(y_axis):
-            diff = filtered_data[col1] - filtered_data[col2]
+            diff = dff[col1] - dff[col2]
             crossref[ind1, ind2] = np.sum(
                 np.abs(diff.dropna())) / len(diff.dropna())
 
@@ -56,13 +57,8 @@ def generate_user_heatmap(data_df, users, hm_click, reset):
                 yref="y",
                 x=col1,
                 y=col2,
-                font=dict(family="sans-serif"),
+                font=dict(family="sans-serif", color=palette['black']),
             )
-            # Highlight annotation text by self-click
-            if col1 == user1 and col2 == user2:
-                if not reset:
-                    annotation_dict.update(
-                        size=15, font=dict(color=palette['light']))
 
             annotations.append(annotation_dict)
 
@@ -91,30 +87,29 @@ def generate_user_heatmap(data_df, users, hm_click, reset):
         )
     ]
 
-    layout = dict(
-        margin=dict(l=100, b=50, t=50, r=50),
-        modebar={"orientation": "v"},
-        font=dict(family="Open Sans"),
-        annotations=annotations,
-        shapes=shapes,
-        xaxis=dict(
-            side="top",
-            ticks="",
-            ticklen=2,
-            tickfont=dict(family="sans-serif", color=palette['light']),
-            tickcolor=palette['light'],
-        ),
-        yaxis=dict(
-            side="left",
-            ticks="",
-            ticklen=2,
-            tickfont=dict(family="sans-serif", color=palette['light']),
-            ticksuffix="",
-            tickcolor=palette['light'],
-            autorange="reversed"
-        ),
-        hovermode="closest",
-        showlegend=False,
+    layout = copy.deepcopy(graph_custom)
+    layout.update(
+        dict(
+            margin=dict(l=100, b=50, t=50, r=50),
+            modebar={"orientation": "v"},
+            annotations=annotations,
+            shapes=shapes,
+            xaxis=dict(
+                side="top",
+                ticks="",
+                ticklen=2,
+                tickfont=dict(family="sans-serif", color=palette['light']),
+                tickcolor=palette['light'],
+            ),
+            yaxis=dict(
+                side="left",
+                ticks="",
+                ticklen=2,
+                tickfont=dict(family="sans-serif", color=palette['light']),
+                ticksuffix="",
+                tickcolor=palette['light'],
+                autorange="reversed"
+            ),
+        )
     )
-    layout.update(graph_custom)
     return {"data": data, "layout": layout}
