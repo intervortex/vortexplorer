@@ -23,17 +23,9 @@ def generate_crossuser_corr(data, hm_click):
         ydata = dff[user2]
         zdata = dff['AVG']
         text = (
-            dff["Artist"]
-            + " - "
-            + "<i>"
-            + dff["Album"]
-            + "</i> ("
-            + dff["Year"].map(str)
-            + ")<br> Average: "
-            + dff["AVG"].map(str)
-            + " (from "
-            + dff["Votes"].map(str)
-            + " votes)"
+            dff["Artist"] + " - " + "<i>" + dff["Album"] + "</i> (" +
+            dff["Year"].map(str) + ")<br> Average: " + dff["AVG"].map(str) +
+            " (from " + dff["Votes"].map(str) + " votes)"
         )
 
     hovertemplate = "<b> Album: </b> <br> %{text}<extra></extra>"
@@ -48,11 +40,18 @@ def generate_crossuser_corr(data, hm_click):
             marker={
                 'symbol': 'square',
                 'size': 17,
-                'line': {'width': 0.5, 'color': palette['light']},
+                'line': {
+                    'width': 0.5,
+                    'color': palette['light']
+                },
                 'color': zdata,
                 'colorscale': 'inferno',
-                'showscale':True,
-                'colorbar':{'title': {'text': 'Average'}},
+                'showscale': True,
+                'colorbar': {
+                    'title': {
+                        'text': 'Average'
+                    }
+                },
             },
             text=text,
         )
@@ -60,7 +59,12 @@ def generate_crossuser_corr(data, hm_click):
     layout = copy.deepcopy(graph_custom)
     layout.update(
         dict(
-            margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
+            margin={
+                'l': 40,
+                'b': 40,
+                't': 10,
+                'r': 10
+            },
             font=dict(family="Open Sans", color=palette['light'], size=18),
             xaxis={
                 'title': user1,

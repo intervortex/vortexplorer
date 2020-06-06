@@ -48,8 +48,8 @@ def generate_crossuser_heatmap(data, users, hm_click, reset):
     for ind1, col1 in enumerate(x_axis):
         for ind2, col2 in enumerate(y_axis):
             diff = dff[col1] - dff[col2]
-            crossref[ind1, ind2] = np.sum(
-                np.abs(diff.dropna())) / len(diff.dropna())
+            crossref[ind1, ind2] = np.sum(np.abs(diff.dropna())
+                                          ) / len(diff.dropna())
 
             annotation_dict = dict(
                 showarrow=False,
@@ -81,7 +81,10 @@ def generate_crossuser_heatmap(data, users, hm_click, reset):
                 tickmode='array',
                 tickvals=[0, np.max(crossref_adj)],
                 ticktext=['Agree', 'Disagree'],
-                tickfont={'size': 13, 'color': palette['light']},
+                tickfont={
+                    'size': 13,
+                    'color': palette['light']
+                },
             ),
             colorscale='inferno',
             reversescale=True,

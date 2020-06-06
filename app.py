@@ -25,8 +25,10 @@ from src.user_breakdown import generate_user_breakdown
 # Create application
 app = dash.Dash(
     __name__,
-    meta_tags=[{"name": "viewport",
-                "content": "width=device-width, initial-scale=1"}],
+    meta_tags=[{
+        "name": "viewport",
+        "content": "width=device-width, initial-scale=1"
+    }],
     external_stylesheets=[dbc.themes.DARKLY],
 )
 
@@ -42,10 +44,11 @@ DATA_PATH = BASE_PATH.joinpath("data").resolve()
 # Read data
 spreadsheet_list = ['GOAT']
 data_df = pd.read_csv(DATA_PATH / "goat.csv")
-users = ['goaticorn',
-         'goatiyas', 'Targeauxt', 'Capryde', 'JoatK', 'Dr. Goatinen',
-         'crazygoatman', 'aftergoat', 'Ca Prines', 'Goatdicot', 'dygoatic',
-         'Goatickvillian']
+users = [
+    'goaticorn', 'goatiyas', 'Targeauxt', 'Capryde', 'JoatK', 'Dr. Goatinen',
+    'crazygoatman', 'aftergoat', 'Ca Prines', 'Goatdicot', 'dygoatic',
+    'Goatickvillian'
+]
 
 
 def header():
@@ -55,8 +58,10 @@ def header():
             dbc.NavItem(
                 dcc.Dropdown(
                     id="spreadsheet-select",
-                    options=[{"label": i, "value": i}
-                             for i in spreadsheet_list],
+                    options=[{
+                        "label": i,
+                        "value": i
+                    } for i in spreadsheet_list],
                     value=spreadsheet_list[0],
                 ),
                 style={"width": "200px"},
@@ -110,25 +115,17 @@ app.layout = html.Div(
         dbc.Container(
             id="app-container",
             children=[
-                dbc.Row(
-                    dbc.Col(
-                        build_tabs(),
-                    )
-                ),
-                dbc.Row(
-                    dbc.Col(
-                        id="app-content"
-                    )
-                )
+                dbc.Row(dbc.Col(build_tabs(), )),
+                dbc.Row(dbc.Col(id="app-content"))
             ],
             style={'margin-top': "100px"}
         ),
     ],
 )
 
+
 # Tabs
-@app.callback(Output('app-content', 'children'),
-              [Input('app-tabs', 'value')])
+@app.callback(Output('app-content', 'children'), [Input('app-tabs', 'value')])
 def render_content(tab):
     if tab == 'tab1':
         return tab_overview()
@@ -150,15 +147,12 @@ def get_spreadsheet_data(spreadsheet_name):
 
 
 # Data tab 1
-@app.callback(
-    [
-        Output("cardText1", "children"),
-        Output("cardText2", "children"),
-        Output("cardText3", "children"),
-    ],
-    [Input("spreadsheet_data", 'modified_timestamp')],
-    [State("spreadsheet_data", 'data')]
-)
+@app.callback([
+    Output("cardText1", "children"),
+    Output("cardText2", "children"),
+    Output("cardText3", "children"),
+], [Input("spreadsheet_data", 'modified_timestamp')],
+              [State("spreadsheet_data", 'data')])
 def update_text(ts, data):
 
     if ts is None:
@@ -167,15 +161,13 @@ def update_text(ts, data):
     df = pd.DataFrame(data)
 
     return (
-        df['Album'].count(),
-        df['Artist'].nunique(),
-        f"{df['AVG'].mean(): .3f}"
+        df['Album'].count(), df['Artist'].nunique(), f"{df['AVG'].mean(): .3f}"
     )
 
 
 @app.callback(
-    Output("overview_year", "figure"),
-    [Input("spreadsheet_data", 'modified_timestamp')],
+    Output("overview_year",
+           "figure"), [Input("spreadsheet_data", 'modified_timestamp')],
     [State("spreadsheet_data", 'data')]
 )
 def update_overview_year(ts, data):
@@ -187,8 +179,8 @@ def update_overview_year(ts, data):
 
 
 @app.callback(
-    Output("overview_stats", "figure"),
-    [Input("spreadsheet_data", 'modified_timestamp')],
+    Output("overview_stats",
+           "figure"), [Input("spreadsheet_data", 'modified_timestamp')],
     [State("spreadsheet_data", 'data')]
 )
 def update_overview_stats(ts, data):
@@ -200,13 +192,11 @@ def update_overview_stats(ts, data):
 
 
 @app.callback(
-    Output("overview_year_tbl", "data"),
-    [
+    Output("overview_year_tbl", "data"), [
         Input("spreadsheet_data", 'modified_timestamp'),
         Input("overview_year", "selectedData"),
         Input("overview_stats", "selectedData"),
-    ],
-    [State("spreadsheet_data", 'data')]
+    ], [State("spreadsheet_data", 'data')]
 )
 def update_overview_year_tbl(ts, sel_year, sel_stats, data):
 
@@ -218,11 +208,9 @@ def update_overview_year_tbl(ts, sel_year, sel_stats, data):
 
 # Data tab 2
 @app.callback(
-    Output("user_overview", "figure"),
-    [
+    Output("user_overview", "figure"), [
         Input("spreadsheet_data", 'modified_timestamp'),
-    ],
-    [State("spreadsheet_data", 'data')]
+    ], [State("spreadsheet_data", 'data')]
 )
 def update_user_overview(ts, data):
 
@@ -232,16 +220,12 @@ def update_user_overview(ts, data):
     return generate_user_overview(data, users)
 
 
-@app.callback(
-    [
-        Output("user_breakdown_select", "options"),
-        Output("user_breakdown_select", "value"),
-    ],
-    [
-        Input("spreadsheet_data", 'modified_timestamp'),
-    ],
-    [State("spreadsheet_data", 'data')]
-)
+@app.callback([
+    Output("user_breakdown_select", "options"),
+    Output("user_breakdown_select", "value"),
+], [
+    Input("spreadsheet_data", 'modified_timestamp'),
+], [State("spreadsheet_data", 'data')])
 def update_user_breakdown_value(ts, data):
 
     if ts is None:
@@ -251,12 +235,10 @@ def update_user_breakdown_value(ts, data):
 
 
 @app.callback(
-    Output("user_breakdown", "figure"),
-    [
+    Output("user_breakdown", "figure"), [
         Input("spreadsheet_data", 'modified_timestamp'),
         Input("user_breakdown_select", "value"),
-    ],
-    [State("spreadsheet_data", 'data')]
+    ], [State("spreadsheet_data", 'data')]
 )
 def update_user_breakdown(ts, users, data):
 
@@ -268,12 +250,10 @@ def update_user_breakdown(ts, users, data):
 
 # Data tab 3
 @app.callback(
-    Output("cross_taste_map", "figure"),
-    [
+    Output("cross_taste_map", "figure"), [
         Input("spreadsheet_data", 'modified_timestamp'),
         Input("cross_taste_map", "clickData"),
-    ],
-    [State("spreadsheet_data", 'data')]
+    ], [State("spreadsheet_data", 'data')]
 )
 def update_heatmap(ts, click, data):
 
@@ -284,12 +264,10 @@ def update_heatmap(ts, click, data):
 
 
 @app.callback(
-    Output("taste_detail", "figure"),
-    [
+    Output("taste_detail", "figure"), [
         Input("spreadsheet_data", 'modified_timestamp'),
         Input("cross_taste_map", "clickData"),
-    ],
-    [State("spreadsheet_data", 'data')]
+    ], [State("spreadsheet_data", 'data')]
 )
 def update_detail_taste(ts, hm_click, data):
 

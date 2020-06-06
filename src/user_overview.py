@@ -11,12 +11,19 @@ def generate_user_overview(data, users):
     # generate an array of rainbow colors by fixing the saturation and lightness of the HSL
     # representation of colour and marching around the hue.
     # Plotly accepts any CSS color format, see e.g. http://www.w3schools.com/cssref/css_colors_legal.asp.
-    c = ['hsl('+str(h)+',50%'+',50%)' for h in np.linspace(0, 360, len(users))]
+    c = [
+        'hsl(' + str(h) + ',50%' + ',50%)'
+        for h in np.linspace(0, 360, len(users))
+    ]
 
     # Each box is represented by a dict that contains the data, the type, and the colour.
     # Use list comprehension to describe N boxes, each with a different colour and with different randomly generated data:
     fig = go.Figure(
-        data=[go.Box(y=dff[user], name=user, marker_color=c[ind]) for ind, user in enumerate(users)])
+        data=[
+            go.Box(y=dff[user], name=user, marker_color=c[ind])
+            for ind, user in enumerate(users)
+        ]
+    )
 
     # format the layout
     fig.update_layout(**graph_custom)

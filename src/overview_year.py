@@ -18,11 +18,16 @@ def generate_overview_year(data):
             x=dfy.index,
             y=dfy["Year"],
             name="All years",
-            hovertemplate="<b> %{x}: </b> <br> Albums: %{y} <br> Average: %{marker.color:.2f}<extra></extra>",
+            hovertemplate=
+            "<b> %{x}: </b> <br> Albums: %{y} <br> Average: %{marker.color:.2f}<extra></extra>",
             marker={
                 'color': dfy['AVG'],
-                'showscale':True,
-                'colorbar':{'title': {'text': 'Average'}},
+                'showscale': True,
+                'colorbar': {
+                    'title': {
+                        'text': 'Average'
+                    }
+                },
             },
             colorscale='inferno'
         ),
