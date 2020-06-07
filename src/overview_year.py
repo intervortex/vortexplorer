@@ -13,7 +13,10 @@ def generate_overview_year(data):
         dff = dff.resample('A').agg({'Released': 'count', 'AVG': 'mean'})
     except:
         dff.index = pd.to_datetime(dff["Released"], format="%b-%d-%Y")
-        dff = dff.resample('M').agg({'Released': 'count', 'AVG': 'mean'})
+        dff = dff.resample('M', label='left').agg({
+            'Released': 'count',
+            'AVG': 'mean'
+        })
 
     data = [
         dict(
