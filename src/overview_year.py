@@ -49,7 +49,7 @@ def generate_overview_year(data):
                 'showgrid': True,
             },
             xaxis={
-                'title': 'Years',
+                'title': 'Time',
             },
             dragmode='select',
             selectdirection='h',
