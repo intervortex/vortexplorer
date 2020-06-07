@@ -5,7 +5,6 @@ import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-import numpy as np
 import pandas as pd
 import requests
 from dash.dependencies import Input, Output, State
@@ -22,6 +21,7 @@ from src.tab_overview import tab_overview
 from src.tab_user import tab_user
 from src.user_breakdown import generate_user_breakdown
 from src.user_overview import generate_user_overview
+from src.clean_data import (process_spreadsheet, process_users)
 
 # Create application
 app = dash.Dash(
@@ -48,18 +48,9 @@ DATA_PATH = BASE_PATH.joinpath("data").resolve()
 sheets_template = "https://docs.google.com/spreadsheet/ccc?key={0}&output=csv"
 spreadsheet_list = {
     'GOAT': "1F_7q1tP7zoy3sJKIAJa2XJ5NbyAGASvmiglSJSneh2U",
-    'Reliquary': "13T9MFuhDTuQe_21s58KcX6KiiT2w_HvfiQ9AjEbuzYM"
+    'Reliquary': "13T9MFuhDTuQe_21s58KcX6KiiT2w_HvfiQ9AjEbuzYM",
+    'Guts': "18se3f36hUJsTLLoXnYrxKaH_YowWk5HvzqX1jugs72w",
 }
-
-
-def process_spreadsheet(df, spreadsheet_name):
-    if spreadsheet_name == 'GOAT':
-        return df.drop([0,
-                        1]).dropna(axis='columns', thresh=int(0.4 * len(df)))
-
-
-def process_users(dct):
-    return list(dct.keys())[6:]
 
 
 def header():

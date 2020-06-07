@@ -78,10 +78,11 @@ import io
 sheets_template = "https://docs.google.com/spreadsheet/ccc?key={0}&output=csv"
 spreadsheet_list = {
     'GOAT': "1F_7q1tP7zoy3sJKIAJa2XJ5NbyAGASvmiglSJSneh2U",
-    'Reliquary': "13T9MFuhDTuQe_21s58KcX6KiiT2w_HvfiQ9AjEbuzYM"
+    'Reliquary': "13T9MFuhDTuQe_21s58KcX6KiiT2w_HvfiQ9AjEbuzYM",
+    'Guts': "18se3f36hUJsTLLoXnYrxKaH_YowWk5HvzqX1jugs72w",
 }
 
-resp = requests.get(sheets_template.format(spreadsheet_list['GOAT']))
+resp = requests.get(sheets_template.format(spreadsheet_list['Guts']))
 resp.encoding = 'UTF-8'
 df = pd.read_csv(io.StringIO(resp.text))
 
