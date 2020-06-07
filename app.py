@@ -143,7 +143,7 @@ def render_content(tab):
     ],
 )
 def get_spreadsheet_data(spreadsheet_name):
-    return data_df.to_dict()
+    return data_df.to_dict('records')
 
 
 # Data tab 1

@@ -39,6 +39,9 @@ def generate_overview_year(data):
             yaxis={
                 'title': 'Number of albums',
             },
+            xaxis={
+                'title': 'Years',
+            },
             dragmode='select',
             selectdirection='h',
         )
@@ -56,7 +59,6 @@ def generate_overview_year_tbl(data, sel_year, sel_stats):
         dff = dff[dff['Year'].between(start, end)]
 
     if sel_stats is not None:
-        print(sel_stats)
         start = sel_stats["range"]['x'][0]
         end = sel_stats["range"]['x'][1]
         dff = dff[dff['AVG'].between(start, end)]

@@ -1,5 +1,7 @@
+import copy
 import pandas as pd
-import plotly.figure_factory as ff
+import numpy as np
+import scipy.stats as sps
 
 from src.palette import palette, graph_custom
 
@@ -7,29 +9,41 @@ from src.palette import palette, graph_custom
 def generate_overview_stats(data):
 
     dff = pd.DataFrame(data)
+    hist, bins = np.histogram(dff['AVG'], bins='auto', density=False)
+    color = dff['Votes'].groupby(pd.cut(dff['AVG'], bins)).mean()
 
-    hist_data = [dff["AVG"]]
-    group_labels = ["Average"]
-
-    fig = ff.create_distplot(
-        hist_data,
-        group_labels,
-        colors=[palette['light']],
-        bin_size=[0.2],
-        show_rug=False
+    data = [
+        dict(
+            type="bar",
+            x=bins,
+            y=hist,
+            name="All years",
+            hovertemplate=
+            "<b> Mean: %{x:.2f} </b> <br> Albums: %{y} <br> Average votes: %{marker.color:.2f}<extra></extra>",
+            marker={
+                'color': color,
+                'showscale': True,
+                'colorbar': {
+                    'title': {
+                        'text': 'Votes'
+                    }
+                },
+            },
+            colorscale='inferno'
+        ),
+    ]
+    layout = copy.deepcopy(graph_custom)
+    layout.update(
+        dict(
+            title="Average distribution",
+            yaxis={
+                'title': 'Number of albums',
+            },
+            xaxis={
+                'title': 'Average',
+            },
+            dragmode='select',
+            selectdirection='h',
+        )
     )
-
-    # format the layout
-    fig.update_layout(**graph_custom)
-    fig.update_layout(
-        title={
-            "text": "Average distribution",
-            'x': 0.5,
-            'xanchor': 'center',
-        },
-        font=dict(family="Open Sans", color=palette['light']),
-        dragmode='select',
-        selectdirection='h',
-    )
-
-    return fig
+    return {'data': data, 'layout': layout}
