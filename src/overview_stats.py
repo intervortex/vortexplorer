@@ -8,7 +8,7 @@ from src.palette import palette, graph_custom
 
 def generate_overview_stats(data):
 
-    dff = pd.DataFrame(data)
+    dff = pd.DataFrame({key: data[key] for key in ["AVG", "Votes"]})
     hist, bins = np.histogram(dff['AVG'], bins='auto', density=False)
     color = dff['Votes'].groupby(pd.cut(dff['AVG'], bins)).mean()
 

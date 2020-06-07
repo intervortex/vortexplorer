@@ -6,8 +6,6 @@ from src.palette import palette, graph_custom
 
 def generate_user_overview(data, users):
 
-    dff = pd.DataFrame(data)
-
     # generate an array of rainbow colors by fixing the saturation and lightness of the HSL
     # representation of colour and marching around the hue.
     # Plotly accepts any CSS color format, see e.g. http://www.w3schools.com/cssref/css_colors_legal.asp.
@@ -20,7 +18,7 @@ def generate_user_overview(data, users):
     # Use list comprehension to describe N boxes, each with a different colour and with different randomly generated data:
     fig = go.Figure(
         data=[
-            go.Box(y=dff[user], name=user, marker_color=c[ind])
+            go.Box(y=data[user], name=user, marker_color=c[ind])
             for ind, user in enumerate(users)
         ]
     )

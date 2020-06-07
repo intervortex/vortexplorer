@@ -6,22 +6,20 @@ from src.palette import palette, graph_custom
 
 def generate_overview_year(data):
 
-    dff = pd.DataFrame(data)
-
-    dfy = dff[["AVG", "Year"]]
-    dfy.index = pd.to_datetime(dfy["Year"], format="%Y")
-    dfy = dfy.resample('A').agg({'Year': 'count', 'AVG': 'mean'})
+    dff = pd.DataFrame({key: data[key] for key in ["AVG", "Year"]})
+    dff.index = pd.to_datetime(dff["Year"], format="%Y")
+    dff = dff.resample('A').agg({'Year': 'count', 'AVG': 'mean'})
 
     data = [
         dict(
             type="bar",
-            x=dfy.index,
-            y=dfy["Year"],
+            x=dff.index,
+            y=dff["Year"],
             name="All years",
             hovertemplate=
             "<b> %{x}: </b> <br> Albums: %{y} <br> Average: %{marker.color:.2f}<extra></extra>",
             marker={
-                'color': dfy['AVG'],
+                'color': dff['AVG'],
                 'showscale': True,
                 'colorbar': {
                     'title': {
