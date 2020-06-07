@@ -94,3 +94,8 @@ dff = df.drop([0, 1]).dropna(axis='columns', thresh=int(0.4 * len(df)))
 resp.encoding
 
 # %%
+
+dff = pd.DataFrame(data)
+dff[["Year", "Artist", "Album", "AVG", "Votes"]].to_dict('records')
+
+# %%

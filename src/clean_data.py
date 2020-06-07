@@ -7,8 +7,7 @@ NONUSER_COLS = [
 
 def process_spreadsheet(df, spreadsheet_name):
     if spreadsheet_name == 'GOAT':
-        return df.drop([0,
-                        1]).dropna(axis='columns', thresh=int(0.4 * len(df)))
+        return df.drop([0,1]).dropna(axis='columns', thresh=int(0.4 * len(df)))
     elif spreadsheet_name == 'Reliquary':
         return df.drop([0,1,2]).dropna(axis='columns', thresh=int(0.2 * len(df)))
     elif spreadsheet_name == 'Guts':

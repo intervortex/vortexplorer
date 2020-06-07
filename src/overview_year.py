@@ -52,7 +52,10 @@ def generate_overview_year(data):
 
 def generate_overview_year_tbl(data, sel_year, sel_stats):
 
-    dff = pd.DataFrame(data)
+    dff = pd.DataFrame({
+        key: data[key]
+        for key in ["Year", "Artist", "Album", "AVG", "Votes"]
+    })
 
     if sel_year is not None:
         start = int(sel_year["range"]['x'][1][0:4])
@@ -64,4 +67,5 @@ def generate_overview_year_tbl(data, sel_year, sel_stats):
         end = sel_stats["range"]['x'][1]
         dff = dff[dff['AVG'].between(start, end)]
 
-    return dff[["Year", "Artist", "Album", "AVG", "Votes"]].to_dict('records')
+    dff['Year'] = dff['Year'].apply(int).apply(str)
+    return dff.to_dict('records')

@@ -30,7 +30,7 @@ def generate_crossuser_corr(data, hm_click):
             " (from " + dff["Votes"].map(str) + " votes)"
         )
 
-    hovertemplate = "%{x} VS %{y}<br><b> Album: </b> <br> %{text}<extra></extra>"
+    hovertemplate = "%{x:.1f} VS %{y:.1f}<br><b> Album: </b> <br> %{text}<extra></extra>"
 
     data = [
         dict(

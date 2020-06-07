@@ -58,7 +58,7 @@ def header():
         children=[
             dbc.NavItem(
                 html.Audio(
-                    src='assets/in_the_end.mp3', controls=False, autoPlay=True
+                    src='assets/in_the_end.mp3', controls=True, autoPlay=True
                 )
             ),
             dbc.NavItem(dbc.NavLink("Select Spreadsheet", href="#")),
