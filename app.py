@@ -1,28 +1,27 @@
+import io
+import pathlib
+
 import dash
+import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-import dash_bootstrap_components as dbc
+import numpy as np
+import pandas as pd
+import requests
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
-import io
-import numpy as np
-import pandas as pd
-import pathlib
-import requests
-
-from src.tab_overview import tab_overview
-from src.overview_year import generate_overview_year
-from src.overview_year import generate_overview_year_tbl
-from src.overview_stats import generate_overview_stats
-
-from src.tab_cross_user import tab_cross_user
-from src.crossuser_heatmap import generate_crossuser_heatmap
 from src.crossuser_corr import generate_crossuser_corr
-
+from src.crossuser_heatmap import generate_crossuser_heatmap
+from src.overview_stats import generate_overview_stats
+from src.overview_year import (
+    generate_overview_year, generate_overview_year_tbl
+)
+from src.tab_cross_user import tab_cross_user
+from src.tab_overview import tab_overview
 from src.tab_user import tab_user
-from src.user_overview import generate_user_overview
 from src.user_breakdown import generate_user_breakdown
+from src.user_overview import generate_user_overview
 
 # Create application
 app = dash.Dash(
@@ -81,8 +80,37 @@ def header():
             dbc.NavItem(dbc.Button('Halp', id='open')),
             dbc.Modal(
                 [
-                    dbc.ModalHeader("Help"),
-                    dbc.ModalBody("This is the content of the modal"),
+                    dbc.ModalHeader("This is the Vortexplorer."),
+                    dbc.ModalBody([
+                        html.P(
+                            """
+                            Welcome to the Vortexplorer. This dashboard is made to get
+                            a birds-eye view of the Vortex's spreadsheets, making it
+                            simpler to discern what made it into the system, as well
+                            as give some insight into each member's tastes and how they
+                            compare with one another.
+                        """
+                        ),
+                        html.P(
+                            """
+                            In order to select one spreadsheet to view, use the drop-down
+                            in the top right. The tabs at the top switch between an overview
+                            of the music within (Spreadsheet), an overview of the members and
+                            their votes (Members) and a cross-grid allowing members to see
+                            who they match in taste (CrossTaste).
+                        """
+                        ),
+                        html.Hr(),
+                        html.H5("FAQ:"),
+                        html.Div("Q: Is this real-time?"),
+                        html.Div("A: Mostly, data is taken from the spreadsheets every time one is selected."),
+                        html.Br(),
+                        html.Div("Q: I don't see my name!"),
+                        html.Div("A: Only those who have voted enough times are selected. Get voting."),
+                        html.Br(),
+                        html.Div("Q: Something doesn't work!"),
+                        html.Div("A: Let i/0 know and it will be fixed in 1-6 months."),
+                    ]),
                     dbc.ModalFooter(
                         dbc.Button("Close", id="close", className="ml-auto")
                     ),
@@ -116,7 +144,7 @@ def build_tabs():
             ),
             dcc.Tab(
                 id="user-tab",
-                label="Users",
+                label="Members",
                 value="tab2",
                 className="custom-tab bg-dark",
                 selected_className="custom-tab--selected",
