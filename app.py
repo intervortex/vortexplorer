@@ -56,6 +56,11 @@ spreadsheet_list = {
 def header():
     return dbc.NavbarSimple(
         children=[
+            dbc.NavItem(
+                html.Audio(
+                    src='assets/in_the_end.mp3', controls=False, autoPlay=True
+                )
+            ),
             dbc.NavItem(dbc.NavLink("Select Spreadsheet", href="#")),
             dbc.NavItem(
                 dcc.Dropdown(
