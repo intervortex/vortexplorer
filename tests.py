@@ -82,10 +82,14 @@ spreadsheet_list = {
 }
 
 resp = requests.get(sheets_template.format(spreadsheet_list['GOAT']))
+resp.encoding = 'UTF-8'
 df = pd.read_csv(io.StringIO(resp.text))
 
 # %%
 
 dff = df.drop([0, 1]).dropna(axis='columns', thresh=int(0.4 * len(df)))
+
+# %%
+resp.encoding
 
 # %%

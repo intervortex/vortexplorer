@@ -103,13 +103,19 @@ def header():
                         html.Hr(),
                         html.H5("FAQ:"),
                         html.Div("Q: Is this real-time?"),
-                        html.Div("A: Mostly, data is taken from the spreadsheets every time one is selected."),
+                        html.Div(
+                            "A: Mostly, data is taken from the spreadsheets every time one is selected."
+                        ),
                         html.Br(),
                         html.Div("Q: I don't see my name!"),
-                        html.Div("A: Only those who have voted enough times are selected. Get voting."),
+                        html.Div(
+                            "A: Only those who have voted enough times are selected. Get voting."
+                        ),
                         html.Br(),
                         html.Div("Q: Something doesn't work!"),
-                        html.Div("A: Let i/0 know and it will be fixed in 1-6 months."),
+                        html.Div(
+                            "A: Let i/0 know and it will be fixed in 1-6 months."
+                        ),
                     ]),
                     dbc.ModalFooter(
                         dbc.Button("Close", id="close", className="ml-auto")
@@ -215,6 +221,7 @@ def get_spreadsheet_data(spreadsheet_name):
         resp = requests.get(
             sheets_template.format(spreadsheet_list[spreadsheet_name])
         )
+        resp.encoding = 'UTF-8'
         df = pd.read_csv(io.StringIO(resp.text))
     return process_spreadsheet(df, spreadsheet_name).to_dict('list')
 
