@@ -5,9 +5,11 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
+import io
 import numpy as np
 import pandas as pd
 import pathlib
+import requests
 
 from src.tab_overview import tab_overview
 from src.overview_year import generate_overview_year
@@ -37,18 +39,28 @@ app.title = "Vortexplorer"
 app.config.suppress_callback_exceptions = True
 app.scripts.config.serve_locally = False
 
+OFFLINE = False
+
 # Path
 BASE_PATH = pathlib.Path(__file__).parent.resolve()
 DATA_PATH = BASE_PATH.joinpath("data").resolve()
 
 # Read data
-spreadsheet_list = ['GOAT']
-data_df = pd.read_csv(DATA_PATH / "goat.csv")
-users = [
-    'goaticorn', 'goatiyas', 'Targeauxt', 'Capryde', 'JoatK', 'Dr. Goatinen',
-    'crazygoatman', 'aftergoat', 'Ca Prines', 'Goatdicot', 'dygoatic',
-    'Goatickvillian'
-]
+sheets_template = "https://docs.google.com/spreadsheet/ccc?key={0}&output=csv"
+spreadsheet_list = {
+    'GOAT': "1F_7q1tP7zoy3sJKIAJa2XJ5NbyAGASvmiglSJSneh2U",
+    'Reliquary': "13T9MFuhDTuQe_21s58KcX6KiiT2w_HvfiQ9AjEbuzYM"
+}
+
+
+def process_spreadsheet(df, spreadsheet_name):
+    if spreadsheet_name == 'GOAT':
+        return df.drop([0,
+                        1]).dropna(axis='columns', thresh=int(0.4 * len(df)))
+
+
+def process_users(dct):
+    return list(dct.keys())[6:]
 
 
 def header():
@@ -62,7 +74,7 @@ def header():
                         "label": i,
                         "value": i
                     } for i in spreadsheet_list],
-                    value=spreadsheet_list[0],
+                    value=next(iter(spreadsheet_list)),
                 ),
                 style={"width": "200px"},
             ),
@@ -169,7 +181,14 @@ def render_content(tab):
     ],
 )
 def get_spreadsheet_data(spreadsheet_name):
-    return data_df.to_dict('records')
+    if OFFLINE:
+        df = pd.read_csv(DATA_PATH / "goat.csv")
+    else:
+        resp = requests.get(
+            sheets_template.format(spreadsheet_list[spreadsheet_name])
+        )
+        df = pd.read_csv(io.StringIO(resp.text))
+    return process_spreadsheet(df, spreadsheet_name).to_dict('list')
 
 
 # Data tab 1
@@ -243,7 +262,7 @@ def update_user_overview(ts, data):
     if ts is None:
         raise PreventUpdate
 
-    return generate_user_overview(data, users)
+    return generate_user_overview(data, process_users(data))
 
 
 @app.callback([
@@ -257,6 +276,8 @@ def update_user_breakdown_value(ts, data):
     if ts is None:
         raise PreventUpdate
 
+    users = process_users(data)
+
     return [{'label': user, "value": user} for user in users], users[0]
 
 
@@ -266,12 +287,12 @@ def update_user_breakdown_value(ts, data):
         Input("user_breakdown_select", "value"),
     ], [State("spreadsheet_data", 'data')]
 )
-def update_user_breakdown(ts, users, data):
+def update_user_breakdown(ts, sel_users, data):
 
     if ts is None:
         raise PreventUpdate
 
-    return generate_user_breakdown(data, users)
+    return generate_user_breakdown(data, sel_users)
 
 
 # Data tab 3
@@ -286,7 +307,7 @@ def update_heatmap(ts, click, data):
     if ts is None:
         raise PreventUpdate
 
-    return generate_crossuser_heatmap(data, users, click, False)
+    return generate_crossuser_heatmap(data, process_users(data), click, False)
 
 
 @app.callback(
