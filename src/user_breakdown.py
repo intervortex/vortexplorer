@@ -1,4 +1,3 @@
-import pandas as pd
 import plotly.figure_factory as ff
 
 from src.palette import palette, graph_custom
@@ -13,11 +12,15 @@ def generate_user_breakdown(data, sel_users):
 
         # Have to make sure it's always an array
         sel_users = [sel_users] if isinstance(sel_users, str) else sel_users
-
-        hist_data = [data[user] for user in sel_users]
+        hist_data = [[vote
+                      for vote in data[user]
+                      if vote]
+                     for user in sel_users]
         group_labels = sel_users  # name of the dataset
 
-    fig = ff.create_distplot(hist_data, group_labels, histnorm='probability')
+    fig = ff.create_distplot(
+        hist_data, group_labels, histnorm='probability', show_rug=False
+    )
 
     # format the layout
     fig.update_layout(**graph_custom)
