@@ -2,6 +2,7 @@ gunicorn
 dash
 plotly
 dash_bootstrap_components
+requests
 numpy
 pandas
 scipy
