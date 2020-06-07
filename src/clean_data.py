@@ -1,18 +1,28 @@
+from sheets import spreadsheet_list
 
 NONUSER_COLS = [
-    'rank', 'artist', 'album', 'year', 'day',
-    'lists', 'votes', 'avg', 'wavg', 'rec', 'yt link'
+    'rank', 'artist', 'album', 'year', 'day', 'lists', 'votes', 'avg', 'wavg',
+    'released', 'genre', 'label', 'rec', 'yt link'
 ]
 
 
 def process_spreadsheet(df, spreadsheet_name):
-    if spreadsheet_name == 'GOAT':
-        return df.drop([0,1]).dropna(axis='columns', thresh=int(0.4 * len(df)))
-    elif spreadsheet_name == 'Reliquary':
-        return df.drop([0,1,2]).dropna(axis='columns', thresh=int(0.2 * len(df)))
-    elif spreadsheet_name == 'Guts':
-        return df.drop([0,1]).dropna(axis='columns', thresh=int(0.2 * len(df)))
 
+    df = df.rename(
+        columns={
+            spreadsheet_list[spreadsheet_name]['time_col']: 'Released'
+        },
+    ).drop(spreadsheet_list[spreadsheet_name]['header_remove'])
+
+    if spreadsheet_list[spreadsheet_name]['time_col'] == 'Released':
+        df['Released'] = df['Released'].apply(
+            lambda x: x + '-' + spreadsheet_name
+        )
+
+    return df.dropna(
+        axis='columns',
+        thresh=int(spreadsheet_list[spreadsheet_name]['thresh'] * len(df))
+    )
 
 
 def process_users(dct):

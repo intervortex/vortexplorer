@@ -96,6 +96,6 @@ resp.encoding
 # %%
 
 dff = pd.DataFrame(data)
-dff[["Year", "Artist", "Album", "AVG", "Votes"]].to_dict('records')
+dff[["Released", "Artist", "Album", "AVG", "Votes"]].to_dict('records')
 
 # %%

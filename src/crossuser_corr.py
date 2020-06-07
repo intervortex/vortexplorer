@@ -26,8 +26,8 @@ def generate_crossuser_corr(data, hm_click):
         zdata = dff['AVG']
         text = (
             dff["Artist"] + " - " + "<i>" + dff["Album"] + "</i> (" +
-            dff["Year"].map(str) + ")<br> Average: " + dff["AVG"].map(str) +
-            " (from " + dff["Votes"].map(str) + " votes)"
+            dff["Released"].map(str) + ")<br> Average: " +
+            dff["AVG"].map(str) + " (from " + dff["Votes"].map(str) + " votes)"
         )
 
     hovertemplate = "%{x:.1f} VS %{y:.1f}<br><b> Album: </b> <br> %{text}<extra></extra>"

@@ -99,8 +99,8 @@ def tab_overview():
                         id='overview_year_tbl',
                         columns=[
                             {
-                                'id': "Year",
-                                'name': 'Year'
+                                'id': "Released",
+                                'name': 'Released'
                             },
                             {
                                 'id': "Artist",

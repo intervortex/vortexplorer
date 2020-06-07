@@ -10,6 +10,7 @@ import requests
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
+from sheets import spreadsheet_list
 from src.crossuser_corr import generate_crossuser_corr
 from src.crossuser_heatmap import generate_crossuser_heatmap
 from src.overview_stats import generate_overview_stats
@@ -46,11 +47,6 @@ DATA_PATH = BASE_PATH.joinpath("data").resolve()
 
 # Read data
 sheets_template = "https://docs.google.com/spreadsheet/ccc?key={0}&output=csv"
-spreadsheet_list = {
-    'GOAT': "1F_7q1tP7zoy3sJKIAJa2XJ5NbyAGASvmiglSJSneh2U",
-    'Reliquary': "13T9MFuhDTuQe_21s58KcX6KiiT2w_HvfiQ9AjEbuzYM",
-    'Guts': "18se3f36hUJsTLLoXnYrxKaH_YowWk5HvzqX1jugs72w",
-}
 
 
 def header():
@@ -215,7 +211,7 @@ def get_spreadsheet_data(spreadsheet_name):
         df = pd.read_csv(DATA_PATH / "goat.csv")
     else:
         resp = requests.get(
-            sheets_template.format(spreadsheet_list[spreadsheet_name])
+            sheets_template.format(spreadsheet_list[spreadsheet_name]['url'])
         )
         resp.encoding = 'UTF-8'
         df = pd.read_csv(io.StringIO(resp.text))
