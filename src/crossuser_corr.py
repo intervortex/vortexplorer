@@ -1,6 +1,7 @@
 import copy
 
 import pandas as pd
+import random
 
 from src.palette import palette, graph_custom
 
@@ -17,10 +18,11 @@ def generate_crossuser_corr(data, hm_click):
     text = ""
 
     if hm_click is not None:
+
         user1 = hm_click["points"][0]["x"]
         user2 = hm_click["points"][0]["y"]
-        xdata = dff[user1]
-        ydata = dff[user2]
+        xdata = dff[user1].apply(lambda x: x + (random.random() - 0.5) / 3)
+        ydata = dff[user2].apply(lambda x: x + (random.random() - 0.5) / 3)
         zdata = dff['AVG']
         text = (
             dff["Artist"] + " - " + "<i>" + dff["Album"] + "</i> (" +
