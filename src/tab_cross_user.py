@@ -15,12 +15,15 @@ def tab_cross_user():
                         id="description-card",
                         children=[
                             html.H3(
-                                "Keep your friends close and your enemies roasted"),
+                                "Keep your friends close and your enemies roasted"
+                            ),
                             dbc.Card(
                                 """Explore taste similarity between users. """
                                 """Click on the heatmap to see a detailed breakdown. """
                                 """Values closer to 0 mean a better taste agreement. """,
-                                body=True, id="intro"),
+                                body=True,
+                                id="intro"
+                            ),
                         ],
                     ),
                 ]
@@ -36,8 +39,8 @@ def tab_cross_user():
                     html.H3("Tastemap"),
                     html.Hr(),
                     dcc.Graph(
-                        id="cross_taste_map",
-                        figure={'layout': graph_custom}),
+                        id="cross_taste_map", figure={'layout': graph_custom}
+                    ),
                 ],
             )
         ]),
@@ -50,8 +53,10 @@ def tab_cross_user():
                     html.Hr(),
                     html.H3("Tastedetail"),
                     html.Hr(),
-                    dcc.Graph(id="taste_detail",
-                              figure={'layout': graph_custom}),
+                    dcc.Graph(
+                        id="taste_detail", figure={'layout': graph_custom}
+                    ),
                 ],
             )
-        )]
+        )
+    ]

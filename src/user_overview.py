@@ -28,6 +28,7 @@ def generate_user_overview(data, users):
     # format the layout
     fig.update_layout(**graph_custom)
     fig.update_layout(
+        yaxis_title='Vote',
         font=dict(family="Open Sans", color=palette['light'], size=18),
         margin=dict(l=50, b=50, t=20, r=50),
     )

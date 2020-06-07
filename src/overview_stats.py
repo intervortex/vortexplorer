@@ -38,6 +38,9 @@ def generate_overview_stats(data):
             title="Average distribution",
             yaxis={
                 'title': 'Number of albums',
+                'gridcolor': palette['white'],
+                'gridwidth': 1,
+                'showgrid': True,
             },
             xaxis={
                 'title': 'Average',

@@ -38,6 +38,9 @@ def generate_overview_year(data):
             title="Albums throughout the years",
             yaxis={
                 'title': 'Number of albums',
+                'gridcolor': palette['white'],
+                'gridwidth': 1,
+                'showgrid': True,
             },
             xaxis={
                 'title': 'Years',
