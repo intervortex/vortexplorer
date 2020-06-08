@@ -167,7 +167,8 @@ app.layout = html.Div(
             id="app-container",
             children=[
                 dbc.Row(dbc.Col(build_tabs(), )),
-                dbc.Row(dbc.Col(id="app-content"))
+                dbc.Row(dbc.Col(id="app-content")),
+                dbc.Modal(id="error-modal"),
             ],
             style={'margin-top': "100px"}
         ),
@@ -175,7 +176,7 @@ app.layout = html.Div(
 )
 
 
-# Modal
+# Help Modal
 @app.callback(
     Output("modal", "is_open"),
     [Input("open", "n_clicks"),
@@ -201,21 +202,33 @@ def render_content(tab):
 
 # Data
 @app.callback(
-    Output("spreadsheet_data", "data"),
+    [
+        Output("spreadsheet_data", "data"),
+        Output("error-modal", "is_open"),
+        Output("error-modal", "children"),
+    ],
     [
         Input("spreadsheet-select", "value"),
     ],
+    [State("error-modal", "is_open")],
 )
-def get_spreadsheet_data(spreadsheet_name):
+def get_spreadsheet_data(spreadsheet_name, err_modal):
     if OFFLINE:
         df = pd.read_csv(DATA_PATH / "goat.csv")
     else:
-        resp = requests.get(
-            sheets_template.format(spreadsheet_list[spreadsheet_name]['url'])
-        )
-        resp.encoding = 'UTF-8'
-        df = pd.read_csv(io.StringIO(resp.text))
-    return process_spreadsheet(df, spreadsheet_name).to_dict('list')
+        try:
+            resp = requests.get(
+                sheets_template.format(
+                    spreadsheet_list[spreadsheet_name]['url']
+                )
+            )
+            resp.encoding = 'UTF-8'
+            df = process_spreadsheet(
+                pd.read_csv(io.StringIO(resp.text)), spreadsheet_name
+            )
+        except Exception as ex:
+            return {}, True, str(ex)
+    return df.to_dict('list'), False, None
 
 
 # Data tab 1
