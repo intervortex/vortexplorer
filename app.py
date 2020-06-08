@@ -224,7 +224,8 @@ def get_spreadsheet_data(spreadsheet_name, err_modal):
             )
             resp.encoding = 'UTF-8'
             df = process_spreadsheet(
-                pd.read_csv(io.StringIO(resp.text)), spreadsheet_name
+                pd.read_csv(io.StringIO(resp.text), na_values=[' ']),
+                spreadsheet_name
             )
         except Exception as ex:
             return {}, True, str(ex)

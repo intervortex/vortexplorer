@@ -13,8 +13,6 @@ def generate_crossuser_heatmap(data, users, hm_click, reset):
     x_axis = ['AVG'] + users
     y_axis = ['AVG'] + users
 
-    user1 = ""
-    user2 = ""
     shapes = []
 
     if hm_click is not None:
@@ -86,8 +84,8 @@ def generate_crossuser_heatmap(data, users, hm_click, reset):
                     'color': palette['light']
                 },
             ),
-            colorscale='inferno',
-            reversescale=True,
+            colorscale='Blackbody',
+            # reversescale=True,
         )
     ]
 
