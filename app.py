@@ -52,11 +52,11 @@ sheets_template = "https://docs.google.com/spreadsheet/ccc?key={0}&output=csv"
 def header():
     return dbc.NavbarSimple(
         children=[
-            dbc.NavItem(
-                html.Audio(
-                    src='assets/in_the_end.mp3', controls=True, autoPlay=True
-                )
-            ),
+            # dbc.NavItem(
+            #     html.Audio(
+            #         src='assets/in_the_end.mp3', controls=True, autoPlay=True
+            #     )
+            # ),
             dbc.NavItem(dbc.NavLink("Select Spreadsheet", href="#")),
             dbc.NavItem(
                 dcc.Dropdown(
