@@ -10,25 +10,22 @@ def generate_crossuser_corr(data, hm_click):
 
     dff = pd.DataFrame(data)
 
-    user1 = ""
-    user2 = ""
-    xdata = ""
-    ydata = ""
-    zdata = ""
-    text = ""
+    user1 = "AVG"
+    user2 = "AVG"
 
     if hm_click is not None:
 
         user1 = hm_click["points"][0]["x"]
         user2 = hm_click["points"][0]["y"]
-        xdata = dff[user1].apply(lambda x: x + (random.random() - 0.5) / 3)
-        ydata = dff[user2].apply(lambda x: x + (random.random() - 0.5) / 3)
-        zdata = dff['AVG']
-        text = (
-            dff["Artist"] + " - " + "<i>" + dff["Album"] + "</i> (" +
-            dff["Released"].map(str) + ")<br> Average: " +
-            dff["AVG"].map(str) + " (from " + dff["Votes"].map(str) + " votes)"
-        )
+
+    xdata = dff[user1].apply(lambda x: x + (random.random() - 0.5) / 3)
+    ydata = dff[user2].apply(lambda x: x + (random.random() - 0.5) / 3)
+    zdata = dff['AVG']
+    text = (
+        dff["Artist"] + " - " + "<i>" + dff["Album"] + "</i> (" +
+        dff["Released"].map(str) + ")<br> Average: " + dff["AVG"].map(str) +
+        " (from " + dff["Votes"].map(str) + " votes)"
+    )
 
     hovertemplate = "%{x:.1f} VS %{y:.1f}<br><b> Album: </b> <br> %{text}<extra></extra>"
 
