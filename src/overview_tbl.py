@@ -23,9 +23,12 @@ def generate_overview_tbl(data, sel_year, sel_stats, column="AVG"):
         dff["Released"] = pd.to_datetime(dff["Released"], format="%b-%d-%Y")
 
     if sel_year is not None:
-        start = datetime.strptime(sel_year["range"]['x'][1][:10], "%Y-%m-%d")
-        end = datetime.strptime(sel_year["range"]['x'][0][:10], "%Y-%m-%d")
-        dff = dff[dff['Released'].between(start, end)]
+        one = datetime.strptime(sel_year["range"]['x'][1][:10], "%Y-%m-%d")
+        two = datetime.strptime(sel_year["range"]['x'][0][:10], "%Y-%m-%d")
+        if one < two:
+            dff = dff[dff['Released'].between(one, two)]
+        else:
+            dff = dff[dff['Released'].between(two, one)]
 
     if sel_stats is not None:
         start = sel_stats["range"]['x'][0]
