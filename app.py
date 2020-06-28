@@ -1,5 +1,3 @@
-# TODO: Use AVG or WAVG
-
 import io
 import pathlib
 
@@ -68,6 +66,8 @@ def header():
                         "value": i
                     } for i in spreadsheet_list],
                     value=next(iter(spreadsheet_list)),
+                    persistence=True,
+                    persistence_type="local"
                 ),
                 style={"width": "200px"},
             ),
@@ -134,6 +134,8 @@ def build_tabs():
         id="app-tabs",
         value="tab1",
         className="custom-tabs",
+        persistence=True,
+        persistence_type="local",
         children=[
             dcc.Tab(
                 id="general-tab",
@@ -209,9 +211,7 @@ def render_content(tab):
         Output("error-modal", "is_open"),
         Output("error-modal", "children"),
     ],
-    [
-        Input("spreadsheet-select", "value"),
-    ],
+    [Input("spreadsheet-select", "value")],
     [State("error-modal", "is_open")],
 )
 def get_spreadsheet_data(spreadsheet_name, err_modal):
@@ -231,6 +231,7 @@ def get_spreadsheet_data(spreadsheet_name, err_modal):
             )
         except Exception as ex:
             return {}, True, str(ex)
+
     return df.to_dict('list'), False, None
 
 
@@ -239,44 +240,60 @@ def get_spreadsheet_data(spreadsheet_name, err_modal):
     Output("cardText1", "children"),
     Output("cardText2", "children"),
     Output("cardText3", "children"),
-], [Input("spreadsheet_data", 'modified_timestamp')],
-              [State("spreadsheet_data", 'data')])
-def update_text(ts, data):
+], [
+    Input("average-select", "value"),
+    Input("spreadsheet_data", 'modified_timestamp'),
+], [State("spreadsheet_data", 'data')])
+def update_text(avg_col, ts, data):
 
     if ts is None:
         raise PreventUpdate
+
+    col = "AVG"
+    if avg_col and "WAVG" in data:
+        col = "WAVG"
 
     df = pd.DataFrame(data)
 
     return (
-        df['Album'].count(), df['Artist'].nunique(), f"{df['AVG'].mean(): .3f}"
+        df['Album'].count(), df['Artist'].nunique(), f"{df[col].mean(): .3f}"
     )
 
 
 @app.callback(
-    Output("overview_year",
-           "figure"), [Input("spreadsheet_data", 'modified_timestamp')],
-    [State("spreadsheet_data", 'data')]
+    Output("overview_year", "figure"), [
+        Input("average-select", "value"),
+        Input("spreadsheet_data", 'modified_timestamp')
+    ], [State("spreadsheet_data", 'data')]
 )
-def update_overview_year(ts, data):
+def update_overview_year(avg_col, ts, data):
 
     if ts is None:
         raise PreventUpdate
 
-    return generate_overview_year(data)
+    col = "AVG"
+    if avg_col and "WAVG" in data:
+        col = "WAVG"
+
+    return generate_overview_year(data, col)
 
 
 @app.callback(
-    Output("overview_stats",
-           "figure"), [Input("spreadsheet_data", 'modified_timestamp')],
-    [State("spreadsheet_data", 'data')]
+    Output("overview_stats", "figure"), [
+        Input("average-select", "value"),
+        Input("spreadsheet_data", 'modified_timestamp')
+    ], [State("spreadsheet_data", 'data')]
 )
-def update_overview_stats(ts, data):
+def update_overview_stats(avg_col, ts, data):
 
     if ts is None:
         raise PreventUpdate
 
-    return generate_overview_stats(data)
+    col = "AVG"
+    if avg_col and "WAVG" in data:
+        col = "WAVG"
+
+    return generate_overview_stats(data, col)
 
 
 @app.callback(
@@ -284,14 +301,19 @@ def update_overview_stats(ts, data):
         Input("spreadsheet_data", 'modified_timestamp'),
         Input("overview_year", "selectedData"),
         Input("overview_stats", "selectedData"),
+        Input("average-select", "value"),
     ], [State("spreadsheet_data", 'data')]
 )
-def update_overview_year_tbl(ts, sel_year, sel_stats, data):
+def update_overview_year_tbl(ts, sel_year, sel_stats, avg_col, data):
 
     if ts is None:
         raise PreventUpdate
 
-    return generate_overview_year_tbl(data, sel_year, sel_stats)
+    col = "AVG"
+    if avg_col and "WAVG" in data:
+        col = "WAVG"
+
+    return generate_overview_year_tbl(data, sel_year, sel_stats, col)
 
 
 # Data tab 2
@@ -311,9 +333,8 @@ def update_user_overview(ts, data):
 @app.callback([
     Output("user_breakdown_select", "options"),
     Output("user_breakdown_select", "value"),
-], [
-    Input("spreadsheet_data", 'modified_timestamp'),
-], [State("spreadsheet_data", 'data')])
+], [Input("spreadsheet_data", 'modified_timestamp')],
+              [State("spreadsheet_data", 'data')])
 def update_user_breakdown_value(ts, data):
 
     if ts is None:

@@ -4,14 +4,14 @@ import pandas as pd
 from src.palette import palette, graph_custom
 
 
-def generate_crossuser_heatmap(data, users, hm_click, reset):
+def generate_crossuser_heatmap(data, users, hm_click, reset, column="AVG"):
     """
     """
 
     dff = pd.DataFrame(data)
 
-    x_axis = ['AVG'] + users
-    y_axis = ['AVG'] + users
+    x_axis = [column] + users
+    y_axis = [column] + users
 
     shapes = []
 
@@ -84,7 +84,7 @@ def generate_crossuser_heatmap(data, users, hm_click, reset):
                     'color': palette['light']
                 },
             ),
-            colorscale='Blackbody',
+            colorscale='Bluered',
             # reversescale=True,
         )
     ]

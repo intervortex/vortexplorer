@@ -6,12 +6,12 @@ import random
 from src.palette import palette, graph_custom
 
 
-def generate_crossuser_corr(data, hm_click):
+def generate_crossuser_corr(data, hm_click, column="AVG"):
 
     dff = pd.DataFrame(data)
 
-    user1 = "AVG"
-    user2 = "AVG"
+    user1 = column
+    user2 = column
 
     if hm_click is not None:
 
@@ -20,10 +20,10 @@ def generate_crossuser_corr(data, hm_click):
 
     xdata = dff[user1].apply(lambda x: x + (random.random() - 0.5) / 3)
     ydata = dff[user2].apply(lambda x: x + (random.random() - 0.5) / 3)
-    zdata = dff['AVG']
+    zdata = dff[column]
     text = (
         dff["Artist"] + " - " + "<i>" + dff["Album"] + "</i> (" +
-        dff["Released"].map(str) + ")<br> Average: " + dff["AVG"].map(str) +
+        dff["Released"].map(str) + ")<br> Average: " + dff[column].map(str) +
         " (from " + dff["Votes"].map(str) + " votes)"
     )
 

@@ -68,7 +68,24 @@ def tab_overview():
                                     id="cardText3",
                                     className="card-title"
                                 ),
-                                html.P("Vote average", className="card-text"),
+                                html.P(
+                                    children=[
+                                        "Vote average  ",
+                                        dbc.Checklist(
+                                            options=[
+                                                {
+                                                    "label": "Use wAVG?",
+                                                    "value": False
+                                                },
+                                            ],
+                                            id="average-select",
+                                            switch=True,
+                                            inline=True,
+                                            style={"display": "inline"}
+                                        ),
+                                    ],
+                                    className="card-text"
+                                ),
                             ]),
                         ]),
                     ),

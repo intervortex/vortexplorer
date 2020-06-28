@@ -6,11 +6,11 @@ import scipy.stats as sps
 from src.palette import palette, graph_custom
 
 
-def generate_overview_stats(data):
+def generate_overview_stats(data, column="AVG"):
 
-    dff = pd.DataFrame({key: data[key] for key in ["AVG", "Votes"]})
-    hist, bins = np.histogram(dff['AVG'], bins='auto', density=False)
-    color = dff['Votes'].groupby(pd.cut(dff['AVG'], bins)).mean()
+    dff = pd.DataFrame({key: data[key] for key in [column, "Votes"]})
+    hist, bins = np.histogram(dff[column], bins='auto', density=False)
+    color = dff['Votes'].groupby(pd.cut(dff[column], bins)).mean()
 
     data = [
         dict(
