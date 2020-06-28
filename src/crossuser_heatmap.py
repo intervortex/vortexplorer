@@ -84,7 +84,11 @@ def generate_crossuser_heatmap(data, users, hm_click, reset, column="AVG"):
                     'color': palette['light']
                 },
             ),
-            colorscale='Bluered',
+            colorscale=[
+                (0, palette['black']),
+                (0.05, palette['red']),
+                (1, palette['lblue']),
+            ],
             # reversescale=True,
         )
     ]

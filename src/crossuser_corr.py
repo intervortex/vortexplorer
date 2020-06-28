@@ -37,15 +37,23 @@ def generate_crossuser_corr(data, hm_click, column="AVG"):
             opacity=0.7,
             hovertemplate=hovertemplate,
             marker={
-                'symbol': 'square',
-                'size': 10,
+                'symbol':
+                'square',
+                'size':
+                10,
                 'line': {
                     'width': 0.5,
-                    'color': palette['light']
+                    'color': palette['black']
                 },
-                'color': zdata,
-                'colorscale': 'inferno',
-                'showscale': True,
+                'color':
+                zdata,
+                'colorscale': [
+                    (0, palette['lblue']),
+                    (0.5, palette['light']),
+                    (1, palette['red']),
+                ],
+                'showscale':
+                True,
                 'colorbar': {
                     'title': {
                         'text': 'Average'

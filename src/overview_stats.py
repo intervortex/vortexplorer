@@ -21,15 +21,21 @@ def generate_overview_stats(data, column="AVG"):
             hovertemplate=
             "<b> Mean: %{x:.2f} </b> <br> Albums: %{y} <br> Average votes: %{marker.color:.2f}<extra></extra>",
             marker={
-                'color': color,
-                'showscale': True,
+                'color':
+                color,
+                'showscale':
+                True,
                 'colorbar': {
                     'title': {
                         'text': 'Votes'
                     }
                 },
+                'colorscale': [
+                    (0, palette['lblue']),
+                    (0.5, palette['light']),
+                    (1, palette['red']),
+                ],
             },
-            colorscale='inferno'
         ),
     ]
     layout = copy.deepcopy(graph_custom)

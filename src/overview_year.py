@@ -27,15 +27,21 @@ def generate_overview_year(data, column="AVG"):
             hovertemplate=
             "<b> %{x}: </b> <br> Albums: %{y} <br> Average: %{marker.color:.2f}<extra></extra>",
             marker={
-                'color': dff[column],
-                'showscale': True,
+                'color':
+                dff[column],
+                'showscale':
+                True,
                 'colorbar': {
                     'title': {
                         'text': 'Average'
                     }
                 },
-            },
-            colorscale='inferno'
+                'colorscale': [
+                    (0, palette['lblue']),
+                    (0.5, palette['light']),
+                    (1, palette['red']),
+                ],
+            }
         ),
     ]
     layout = copy.deepcopy(graph_custom)
