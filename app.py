@@ -14,9 +14,8 @@ from sheets import spreadsheet_list
 from src.crossuser_corr import generate_crossuser_corr
 from src.crossuser_heatmap import generate_crossuser_heatmap
 from src.overview_stats import generate_overview_stats
-from src.overview_year import (
-    generate_overview_year, generate_overview_year_tbl
-)
+from src.overview_year import generate_overview_year
+from src.overview_tbl import generate_overview_tbl
 from src.tab_cross_user import tab_cross_user
 from src.tab_overview import tab_overview
 from src.tab_user import tab_user
@@ -313,7 +312,7 @@ def update_overview_year_tbl(ts, sel_year, sel_stats, avg_col, data):
     if avg_col and "WAVG" in data:
         col = "WAVG"
 
-    return generate_overview_year_tbl(data, sel_year, sel_stats, col)
+    return generate_overview_tbl(data, sel_year, sel_stats, col)
 
 
 # Data tab 2

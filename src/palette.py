@@ -16,7 +16,7 @@ graph_custom = dict(
     ),
     font=dict(
         family="Open Sans",
-        color=palette['light'],
+        color="white",
     ),
     paper_bgcolor=palette['black'],
     plot_bgcolor=palette['black'],

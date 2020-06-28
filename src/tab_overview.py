@@ -136,18 +136,20 @@ def tab_overview():
                                 'name': 'No. Votes'
                             },
                         ],
-                        style_header={'backgroundColor': 'rgb(30, 30, 30)'},
+                        style_header={'backgroundColor': palette['black']},
                         style_cell={
                             'backgroundColor': 'rgb(50, 50, 50)',
-                            'color': 'white'
+                            'color': 'white',
+                            'border': '1px solid black'
                         },
                         style_filter={
-                            'backgroundColor': 'rgb(185, 167, 167)',
+                            'backgroundColor': palette['lblue'],
                             'color': 'white'
                         },
                         page_size=12,
                         sort_action='native',
                         filter_action='native',
+                        style_as_list_view=True,
                     ),
                 ),
             ],

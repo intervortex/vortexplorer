@@ -62,35 +62,3 @@ def generate_overview_year(data, column="AVG"):
         )
     )
     return {'data': data, 'layout': layout}
-
-
-def generate_overview_year_tbl(data, sel_year, sel_stats, column="AVG"):
-
-    dff = pd.DataFrame({
-        key: data[col]
-        for key, col in zip(
-            ["Released", "Artist", "Album", "AVG", "Votes"],
-            ["Released", "Artist", "Album", column, "Votes"],
-        )
-    })
-
-    year_fmt = "%Y"
-
-    try:
-        dff["Released"] = pd.to_datetime(dff["Released"], format="%Y")
-    except:
-        year_fmt = '%b-%m'
-        dff["Released"] = pd.to_datetime(dff["Released"], format="%b-%d-%Y")
-
-    if sel_year is not None:
-        start = datetime.strptime(sel_year["range"]['x'][1][:10], "%Y-%m-%d")
-        end = datetime.strptime(sel_year["range"]['x'][0][:10], "%Y-%m-%d")
-        dff = dff[dff['Released'].between(start, end)]
-
-    if sel_stats is not None:
-        start = sel_stats["range"]['x'][0]
-        end = sel_stats["range"]['x'][1]
-        dff = dff[dff[column].between(start, end)]
-
-    dff['Released'] = dff['Released'].apply(lambda x: x.strftime(year_fmt))
-    return dff.to_dict('records')
