@@ -133,18 +133,18 @@ def tab_overview():
                             },
                             {
                                 'id': "Votes",
-                                'name': 'No. Votes'
+                                'name': '#Votes'
                             },
                         ],
                         style_header={'backgroundColor': palette['black']},
                         style_cell={
                             'backgroundColor': 'rgb(50, 50, 50)',
-                            'color': 'white',
+                            'color': palette['white'],
                             'border': '1px solid black'
                         },
                         style_filter={
                             'backgroundColor': palette['lblue'],
-                            'color': 'white'
+                            'color': palette['white']
                         },
                         page_size=12,
                         sort_action='native',

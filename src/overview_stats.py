@@ -27,7 +27,7 @@ def generate_overview_stats(data, column="AVG"):
                 True,
                 'colorbar': {
                     'title': {
-                        'text': 'Votes'
+                        'text': '#Votes'
                     }
                 },
                 'colorscale': [

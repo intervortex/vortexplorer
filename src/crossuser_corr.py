@@ -18,6 +18,10 @@ def generate_crossuser_corr(data, hm_click, column="AVG"):
         user1 = hm_click["points"][0]["x"]
         user2 = hm_click["points"][0]["y"]
 
+        if user1 not in dff.columns or user2 not in dff.columns:
+            user1 = column
+            user2 = column
+
     xdata = dff[user1].apply(lambda x: x + (random.random() - 0.5) / 3)
     ydata = dff[user2].apply(lambda x: x + (random.random() - 0.5) / 3)
     zdata = dff[column]
