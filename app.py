@@ -1,3 +1,4 @@
+# TODO tab: album
 import io
 import pathlib
 
@@ -16,6 +17,7 @@ from src.crossuser_heatmap import generate_crossuser_heatmap
 from src.overview_stats import generate_overview_stats
 from src.overview_year import generate_overview_year
 from src.overview_tbl import generate_overview_tbl
+from src.tab_albumator import tab_albumator
 from src.tab_cross_user import tab_cross_user
 from src.tab_overview import tab_overview
 from src.tab_user import tab_user
@@ -157,6 +159,13 @@ def build_tabs():
                 className="custom-tab bg-dark",
                 selected_className="custom-tab--selected",
             ),
+            dcc.Tab(
+                id="album-tab",
+                label="Albumator",
+                value="tab4",
+                className="custom-tab bg-dark",
+                selected_className="custom-tab--selected",
+            ),
         ],
     )
 
@@ -201,6 +210,8 @@ def render_content(tab):
         return tab_user()
     elif tab == 'tab3':
         return tab_cross_user()
+    elif tab == 'tab4':
+        return tab_albumator()
 
 
 # Data
@@ -236,9 +247,9 @@ def get_spreadsheet_data(spreadsheet_name, err_modal):
 
 # Data tab 1
 @app.callback([
-    Output("cardText1", "children"),
-    Output("cardText2", "children"),
-    Output("cardText3", "children"),
+    Output("card-album-number", "children"),
+    Output("card-artist-number", "children"),
+    Output("card-overall-avg", "children"),
 ], [
     Input("average-select", "value"),
     Input("spreadsheet_data", 'modified_timestamp'),
@@ -385,6 +396,36 @@ def update_detail_taste(ts, hm_click, data):
         raise PreventUpdate
 
     return generate_crossuser_corr(data, hm_click)
+
+
+# Data tab 4
+@app.callback([
+    Output("cardText1", "children"),
+    Output("cardText2", "children"),
+], [
+    Input("spreadsheet_data", 'modified_timestamp'),
+], [State("spreadsheet_data", 'data')])
+def update_text(ts, data):
+
+    if ts is None:
+        raise PreventUpdate
+
+    NONUSER_COLS = [
+        'rank', 'artist', 'album', 'year', 'day', 'lists', 'votes', 'avg',
+        'wavg', 'released', 'genre', 'label', 'rec', 'yt link'
+    ]
+
+    df = pd.DataFrame(data)
+    df['std_dev'] = df[[col for col in df.columns
+                        if col.lower() not in NONUSER_COLS]].std(axis=1)
+
+    top = df['std_dev'].idxmax()
+    bot = df['std_dev'].idxmin()
+
+    return (
+        df['Album'].iloc[top] + " - " + df['Artist'].iloc[top],
+        df['Album'].iloc[bot] + " - " + df['Artist'].iloc[bot],
+    )
 
 
 # Run the server

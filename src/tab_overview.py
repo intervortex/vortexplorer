@@ -18,7 +18,8 @@ def tab_overview():
                             html.H3("General overview of the spreadsheet"),
                             dbc.Card(
                                 """Drag to select on the top graphs, the table will update based on this selection. """
-                                """Clicking on the table headers will sort, while typing in the first row will search. """,
+                                """Clicking on the table headers will sort, while typing in the first row will search. """
+                                """Searching for numbers and dates takes ranges: ">3" means above average of 3. """,
                                 body=True,
                                 id="intro"
                             ),
@@ -37,7 +38,7 @@ def tab_overview():
                             dbc.CardBody([
                                 html.H4(
                                     "Card title",
-                                    id="cardText1",
+                                    id="card-album-number",
                                     className="card-title"
                                 ),
                                 html.P(
@@ -51,7 +52,7 @@ def tab_overview():
                             dbc.CardBody([
                                 html.H4(
                                     "Card title",
-                                    id="cardText2",
+                                    id="card-artist-number",
                                     className="card-title"
                                 ),
                                 html.P(
@@ -65,7 +66,7 @@ def tab_overview():
                             dbc.CardBody([
                                 html.H4(
                                     "Card title",
-                                    id="cardText3",
+                                    id="card-overall-avg",
                                     className="card-title"
                                 ),
                                 html.P(
