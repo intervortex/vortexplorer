@@ -1,4 +1,3 @@
-# TODO tab: album
 import io
 import pathlib
 
@@ -12,6 +11,8 @@ from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
 from sheets import spreadsheet_list
+from src.albumator_stats import generate_album_breakdown
+from src.albumator_stats import generate_album_stats
 from src.crossuser_corr import generate_crossuser_corr
 from src.crossuser_heatmap import generate_crossuser_heatmap
 from src.overview_stats import generate_overview_stats
@@ -410,22 +411,41 @@ def update_text(ts, data):
     if ts is None:
         raise PreventUpdate
 
-    NONUSER_COLS = [
-        'rank', 'artist', 'album', 'year', 'day', 'lists', 'votes', 'avg',
-        'wavg', 'released', 'genre', 'label', 'rec', 'yt link'
-    ]
-
-    df = pd.DataFrame(data)
-    df['std_dev'] = df[[col for col in df.columns
-                        if col.lower() not in NONUSER_COLS]].std(axis=1)
-
-    top = df['std_dev'].idxmax()
-    bot = df['std_dev'].idxmin()
+    stats = generate_album_stats(data)
 
     return (
-        df['Album'].iloc[top] + " - " + df['Artist'].iloc[top],
-        df['Album'].iloc[bot] + " - " + df['Artist'].iloc[bot],
+        stats['agreed'],
+        stats['disagreed'],
     )
+
+
+@app.callback([
+    Output("album_breakdown_select", "options"),
+    Output("album_breakdown_select", "value"),
+], [Input("spreadsheet_data", 'modified_timestamp')],
+              [State("spreadsheet_data", 'data')])
+def update_album_breakdown_value(ts, data):
+
+    if ts is None:
+        raise PreventUpdate
+
+    albums = data['Album']
+
+    return [{'label': album, "value": album} for album in albums], albums[0]
+
+
+@app.callback(
+    Output("album_breakdown", "figure"), [
+        Input("spreadsheet_data", 'modified_timestamp'),
+        Input("album_breakdown_select", "value"),
+    ], [State("spreadsheet_data", 'data')]
+)
+def update_album_breakdown(ts, albums, data):
+
+    if ts is None:
+        raise PreventUpdate
+
+    return generate_album_breakdown(data, albums)
 
 
 # Run the server

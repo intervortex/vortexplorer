@@ -37,7 +37,9 @@ def tab_albumator():
                                     id="cardText1",
                                     className="card-title"
                                 ),
-                                html.P("Most agreed", className="card-text"),
+                                html.P(
+                                    "Most agreed on", className="card-text"
+                                ),
                             ]),
                         ]),
                     ),
@@ -50,12 +52,35 @@ def tab_albumator():
                                     className="card-title"
                                 ),
                                 html.P(
-                                    "Most disagreed", className="card-text"
+                                    "Most disagreed on", className="card-text"
                                 ),
                             ]),
                         ]),
                     ),
                 ]),
             ),
+            className="mb-4 mt-4",
+        ),
+
+        # Album breakdown
+        dbc.Row(
+            [
+                dbc.Col([
+                    html.H3("Individual breakdown"),
+                    html.Hr(),
+                    dcc.Dropdown(
+                        id="album_breakdown_select",
+                        multi=True,
+                    )
+                ],
+                        md=4),
+                dbc.Col([
+                    dcc.Graph(
+                        id="album_breakdown", figure={'layout': graph_custom}
+                    ),
+                ],
+                        md=8),
+            ],
+            className="mb-4",
         ),
     ]

@@ -65,10 +65,17 @@ NONUSER_COLS = [
 
 df = process_spreadsheet(
     pd.read_csv(io.StringIO(resp.text), na_values=[' ']), spreadsheet_name
-)
+).reset_index(drop=True)
+# df['std_dev'] = df[[
+#     col for col in df.columns if col.lower() not in NONUSER_COLS
+# ]].std(axis=1)
+
 df['std_dev'] = df[[
     col for col in df.columns if col.lower() not in NONUSER_COLS
-]].std(axis=1)
+]].apply(
+    lambda x: np.std(x) if np.count_nonzero(np.isnan(x)) < 5 else np.nan,
+    axis=1
+)
 
 top = df['std_dev'].idxmax()
 bot = df['std_dev'].idxmin()
