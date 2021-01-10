@@ -8,9 +8,10 @@ redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
 botty = disc_bot()
 
 
-async def reader(ch):
-    while (await ch.wait_message()):
-        msg = await ch.get()
+async def reader(chan):
+    while (await chan.wait_message()):
+        msg = await chan.get()
+        print(msg)
         await botty.print(msg['data'])
 
 
@@ -28,8 +29,9 @@ async def listen_redis():
     await tsk
 
     # # gracefully closing underlying connection
-    conn.close()
-    await conn.wait_closed()
+    r.close()
+    await r.wait_closed()
+    print("all finished")
 
 
 if __name__ == '__main__':
