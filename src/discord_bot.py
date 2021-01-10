@@ -34,5 +34,5 @@ class disc_bot(discord.Client):
         if message.content.startswith('!testbot'):
             await message.reply('I am working!', mention_author=True)
 
-    async def print(self, text):
-        await self.broadcast_chan.send(text)
+    def print(self, text):
+        self.broadcast_chan.send(text)
