@@ -10,6 +10,7 @@ if __name__ == '__main__':
 
     p = conn.pubsub()
     p.subscribe('discord')
+    botty.print("Starting to listen.")
 
     for new_message in p.listen():
         botty.print(new_message['data'])

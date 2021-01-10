@@ -201,7 +201,11 @@ app.layout = html.Div(
     [State("modal", "is_open")],
 )
 def toggle_modal(n1, n2, is_open):
-    r.publish('discord', "We have liftoff.")
+    try:
+        print("Sending to redis.")
+        r.publish('discord', "We have liftoff.")
+    except:
+        pass
     if n1 or n2:
         return not is_open
     return is_open
