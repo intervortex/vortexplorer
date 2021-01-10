@@ -8,17 +8,14 @@ class disc_bot(discord.Client):
     GUILD = None
     broadcast_chan = None
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
 
         try:
             self.TOKEN = os.environ['DISCORD_TOKEN']
         except KeyError:
             print("No token found in ENV")
             return
-
-        self.run(self.TOKEN)
-        print("Discord is fine")
 
     async def on_ready(self):
         print(f'{self.user} has connected to Discord!')
@@ -39,3 +36,6 @@ class disc_bot(discord.Client):
         if self.broadcast_chan:
             print(self.broadcast_chan)
             await self.broadcast_chan.send(text)
+
+    def run_loop(self):
+        self.run(self.TOKEN)
