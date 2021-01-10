@@ -95,7 +95,6 @@ def generate_crossuser_heatmap(data_df, users, hm_click, reset, column="AVG"):
                 (0.95, palette['red']),
                 (1, palette['black']),
             ],
-            # reversescale=True,
         )
     ]
 
