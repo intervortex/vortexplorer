@@ -16,7 +16,6 @@ try:
     import redis
     redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
     r = redis.from_url(redis_url)
-    r.publish('discord', "try this out")
 except:
     pass
 
@@ -202,6 +201,7 @@ app.layout = html.Div(
     [State("modal", "is_open")],
 )
 def toggle_modal(n1, n2, is_open):
+    r.publish('discord', "We have liftoff.")
     if n1 or n2:
         return not is_open
     return is_open
