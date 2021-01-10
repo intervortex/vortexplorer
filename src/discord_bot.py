@@ -4,12 +4,20 @@ import discord
 
 class disc_bot(discord.Client):
 
-    TOKEN = os.environ['DISCORD_TOKEN']
+    TOKEN = None
     GUILD = ""
 
     def __init__(self) -> None:
         super().__init__()
+
+        try:
+            os.environ['DISCORD_TOKEN']
+        except KeyError:
+            print("no can do")
+            pass
+
         self.run(self.TOKEN)
+        print("Discord is fine")
 
     async def on_ready(self):
         print(f'{self.user} has connected to Discord!')
