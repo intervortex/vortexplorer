@@ -6,6 +6,7 @@ class disc_bot(discord.Client):
 
     TOKEN = None
     GUILD = None
+    broadcast_chan = None
 
     def __init__(self) -> None:
         super().__init__()
@@ -35,4 +36,5 @@ class disc_bot(discord.Client):
             await message.reply('I am working!', mention_author=True)
 
     def print(self, text):
-        self.broadcast_chan.send(text)
+        if self.broadcast_chan:
+            self.broadcast_chan.send(text)
