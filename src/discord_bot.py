@@ -37,4 +37,5 @@ class disc_bot(discord.Client):
 
     async def print(self, text):
         if self.broadcast_chan:
+            print(self.broadcast_chan)
             await self.broadcast_chan.send(text)
