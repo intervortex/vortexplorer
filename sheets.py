@@ -1,4 +1,10 @@
 spreadsheet_list = {
+    '2021': {
+        'url': "1I9OAFHol_LMXua0rmSl2yFiOkHDrgMHETrgL7NXYCsA",
+        'header_remove': [0, 1],
+        'thresh': 0.1,
+        'time_col': 'Released',
+    },
     '2020': {
         'url': "1XRWlCGM4QRetcN_PBZAG30MZbzrUzq968Fs2Q38OBXU",
         'header_remove': [0, 1],
