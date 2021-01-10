@@ -1,4 +1,4 @@
-from sheets import spreadsheet_list
+from sheets import sheets_list
 
 NONUSER_COLS = [
     'rank', 'artist', 'album', 'year', 'day', 'lists', 'votes', 'avg', 'wavg',
@@ -8,22 +8,19 @@ NONUSER_COLS = [
 
 def process_spreadsheet(df, spreadsheet_name):
 
-    df = df.rename(
-        columns={
-            spreadsheet_list[spreadsheet_name]['time_col']: 'Released'
-        },
-    ).drop(spreadsheet_list[spreadsheet_name]['header_remove'])
+    sheet = sheets_list[spreadsheet_name]
 
-    if spreadsheet_list[spreadsheet_name]['time_col'] == 'Released':
+    df = df.rename(columns={
+        sheet['time_col']: 'Released'
+    }, ).drop(sheet['header_remove'])
+
+    if sheet['time_col'] == 'Released':
         df['Released'] = df['Released'].apply(
             lambda x: x + '-' + spreadsheet_name
         )
 
     return df.dropna(
-        axis='columns',
-        thresh=min(
-            int(spreadsheet_list[spreadsheet_name]['thresh'] * len(df)), 100
-        )
+        axis='columns', thresh=min(int(sheet['thresh'] * len(df)), 100)
     )
 
 

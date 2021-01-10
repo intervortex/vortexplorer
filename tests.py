@@ -29,9 +29,9 @@ crossref = np.zeros([len(users), len(users)])
 for col1 in users:
     for col2 in users:
         diff = data[col1] - data[col2]
-        crossref[users.index(col1), users.index(col2)] = np.sum(
-            np.abs(diff.dropna())
-        ) / len(diff.dropna())
+        crossref[users.index(col1),
+                 users.index(col2)] = np.sum(np.abs(diff.dropna())
+                                             ) / len(diff.dropna())
 
 # %%
 
@@ -42,7 +42,7 @@ crossref_adj = crossref / np.average(crossref)
 crossref_pd = pd.DataFrame(data=crossref_adj, index=users, columns=users)
 
 # %%
-from sheets import spreadsheet_list
+from sheets import sheets_list
 from src.clean_data import process_spreadsheet
 
 spreadsheet_name = 'Reliquary'

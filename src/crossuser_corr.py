@@ -6,9 +6,9 @@ import random
 from src.palette import palette, graph_custom
 
 
-def generate_crossuser_corr(data, hm_click, column="AVG"):
+def generate_crossuser_corr(data_df, hm_click, column="AVG"):
 
-    dff = pd.DataFrame(data)
+    dff = pd.DataFrame(data_df)
 
     user1 = column
     user2 = column
@@ -65,7 +65,7 @@ def generate_crossuser_corr(data, hm_click, column="AVG"):
                 },
             },
             text=text,
-        )
+        ),
     ]
     layout = copy.deepcopy(graph_custom)
     layout.update(
@@ -93,6 +93,21 @@ def generate_crossuser_corr(data, hm_click, column="AVG"):
                 "tick0": 0.0,
                 "dtick": 1.0,
             },
+            shapes=[{
+                # extra x=y line
+                'type': 'line',
+                'xref': 'x',
+                'yref': 'y',
+                'x0': 0,
+                'y0': 0,
+                'x1': 10,
+                'y1': 10,
+                'line': {
+                    'color': 'rgb(255, 255, 255)',
+                    "dash": 'dash',
+                    'width': 1,
+                }
+            }]
         )
     )
     return {"data": data, "layout": layout}

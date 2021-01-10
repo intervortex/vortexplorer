@@ -1,4 +1,5 @@
 import io
+import os
 import pathlib
 
 import dash
@@ -10,7 +11,16 @@ import requests
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
-from sheets import spreadsheet_list
+# Connect to redis if possible
+try:
+    import redis
+    redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
+    r = redis.from_url(redis_url)
+    r.publish('discord', "try this out")
+except:
+    pass
+
+from sheets import sheets_list, get_sheet_csv
 from src.albumator_stats import generate_album_breakdown
 from src.albumator_stats import generate_album_stats
 from src.crossuser_corr import generate_crossuser_corr
@@ -25,9 +35,6 @@ from src.tab_user import tab_user
 from src.user_breakdown import generate_user_breakdown
 from src.user_overview import generate_user_overview
 from src.clean_data import (process_spreadsheet, process_users)
-
-from src.discord_bot import disc_bot
-botty = disc_bot()
 
 # Create application
 app = dash.Dash(
@@ -44,14 +51,14 @@ app.title = "Vortexplorer"
 app.config.suppress_callback_exceptions = True
 app.scripts.config.serve_locally = False
 
+# Offline mode (no G Sheets) and paths of offline data, for testing
 OFFLINE = False
-
-# Path
 BASE_PATH = pathlib.Path(__file__).parent.resolve()
 DATA_PATH = BASE_PATH.joinpath("data").resolve()
 
-# Read data
-sheets_template = "https://docs.google.com/spreadsheet/ccc?key={0}&output=csv"
+# Begin app layout
+#
+#
 
 
 def header():
@@ -64,8 +71,8 @@ def header():
                     options=[{
                         "label": i,
                         "value": i
-                    } for i in spreadsheet_list],
-                    value=next(iter(spreadsheet_list)),
+                    } for i in sheets_list],
+                    value=next(iter(sheets_list)),
                     persistence=True,
                     persistence_type="local"
                 ),
@@ -228,11 +235,7 @@ def get_spreadsheet_data(spreadsheet_name, err_modal):
         df = pd.read_csv(DATA_PATH / "goat.csv")
     else:
         try:
-            resp = requests.get(
-                sheets_template.format(
-                    spreadsheet_list[spreadsheet_name]['url']
-                )
-            )
+            resp = requests.get(get_sheet_csv(spreadsheet_name))
             resp.encoding = 'UTF-8'
             df = process_spreadsheet(
                 pd.read_csv(io.StringIO(resp.text), na_values=[' ']),
