@@ -1,6 +1,6 @@
 import os
 import redis
-from discord_bot import disc_bot
+from src.discord_bot import disc_bot
 
 redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
 conn = redis.from_url(redis_url)
