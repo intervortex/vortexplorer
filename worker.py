@@ -12,7 +12,7 @@ async def reader(chan):
     while (await chan.wait_message()):
         msg = await chan.get()
         print(msg)
-        await botty.print(msg['data'])
+        await botty.print(msg)
 
 
 async def listen_redis():
