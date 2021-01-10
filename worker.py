@@ -1,5 +1,6 @@
 import os
 import redis
+import asyncio
 from src.discord_bot import disc_bot
 
 redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
@@ -19,5 +20,5 @@ async def listen_redis():
 
 
 if __name__ == '__main__':
-
-    listen_redis()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(listen_redis)
