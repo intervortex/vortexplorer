@@ -84,6 +84,7 @@ def generate_crossuser_corr(data_df, hm_click, column="AVG"):
                 "tickmode": 'linear',
                 "tick0": 0.0,
                 "dtick": 1.0,
+                "constrain": "domain",
             },
             yaxis={
                 'title': user2,
@@ -92,6 +93,9 @@ def generate_crossuser_corr(data_df, hm_click, column="AVG"):
                 "tickmode": 'linear',
                 "tick0": 0.0,
                 "dtick": 1.0,
+                "scaleanchor": "x",
+                "scaleratio": 1,
+                "constrain": "domain",
             },
             shapes=[{
                 # extra x=y line
@@ -107,7 +111,8 @@ def generate_crossuser_corr(data_df, hm_click, column="AVG"):
                     "dash": 'dash',
                     'width': 1,
                 }
-            }]
+            }],
+            height=800,
         )
     )
     return {"data": data, "layout": layout}
