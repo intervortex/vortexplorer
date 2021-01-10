@@ -1,4 +1,8 @@
-spreadsheet_list = {
+# How to get the sheets in a CSV format
+sheets_template = "https://docs.google.com/spreadsheet/ccc?key={0}&output=csv"
+
+# A list of G sheets
+sheets_list = {
     '2021': {
         'url': "1I9OAFHol_LMXua0rmSl2yFiOkHDrgMHETrgL7NXYCsA",
         'header_remove': [0, 1],
@@ -42,3 +46,7 @@ spreadsheet_list = {
         'time_col': 'Released',
     },
 }
+
+
+def get_sheet_csv(spreadsheet_name):
+    return sheets_template.format(sheets_list[spreadsheet_name]['url'])
