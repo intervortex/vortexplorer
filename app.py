@@ -26,6 +26,9 @@ from src.user_breakdown import generate_user_breakdown
 from src.user_overview import generate_user_overview
 from src.clean_data import (process_spreadsheet, process_users)
 
+from src.discord_bot import disc_bot
+botty = disc_bot()
+
 # Create application
 app = dash.Dash(
     __name__,
