@@ -21,8 +21,8 @@ async def listen_redis():
     await botty.print("Starting to listen.")
     print("back from the listen thing")
 
-    conn = await aioredis.create_connection(redis_url)
-    res = await conn.subscribe('discord')
+    r = await aioredis.create_redis(redis_url)
+    res = await r.subscribe('discord')
     ch1 = res[0]
     tsk = asyncio.ensure_future(reader(ch1))
     await tsk
