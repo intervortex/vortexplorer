@@ -5,16 +5,16 @@ import discord
 class disc_bot(discord.Client):
 
     TOKEN = None
-    GUILD = ""
+    GUILD = None
 
     def __init__(self) -> None:
         super().__init__()
 
         try:
-            os.environ['DISCORD_TOKEN']
+            self.TOKEN = os.environ['DISCORD_TOKEN']
         except KeyError:
-            print("no can do")
-            pass
+            print("No token found in ENV")
+            return
 
         self.run(self.TOKEN)
         print("Discord is fine")
