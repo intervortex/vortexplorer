@@ -14,7 +14,9 @@ botty = disc_bot()
 #         await botty.print(msg['data'])
 async def main():
 
+    print("going for the listen thing")
     await botty.print("Starting to listen.")
+    print("back from the listen thing")
 
     # conn = await aioredis.create_connection(redis_url)
     # res = await conn.subscribe('discord')
