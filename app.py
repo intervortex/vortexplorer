@@ -1,5 +1,3 @@
-# TODO: Use AVG or WAVG
-
 import io
 import pathlib
 
@@ -13,12 +11,14 @@ from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
 from sheets import spreadsheet_list
+from src.albumator_stats import generate_album_breakdown
+from src.albumator_stats import generate_album_stats
 from src.crossuser_corr import generate_crossuser_corr
 from src.crossuser_heatmap import generate_crossuser_heatmap
 from src.overview_stats import generate_overview_stats
-from src.overview_year import (
-    generate_overview_year, generate_overview_year_tbl
-)
+from src.overview_year import generate_overview_year
+from src.overview_tbl import generate_overview_tbl
+from src.tab_albumator import tab_albumator
 from src.tab_cross_user import tab_cross_user
 from src.tab_overview import tab_overview
 from src.tab_user import tab_user
@@ -68,6 +68,8 @@ def header():
                         "value": i
                     } for i in spreadsheet_list],
                     value=next(iter(spreadsheet_list)),
+                    persistence=True,
+                    persistence_type="local"
                 ),
                 style={"width": "200px"},
             ),
@@ -134,6 +136,8 @@ def build_tabs():
         id="app-tabs",
         value="tab1",
         className="custom-tabs",
+        persistence=True,
+        persistence_type="local",
         children=[
             dcc.Tab(
                 id="general-tab",
@@ -153,6 +157,13 @@ def build_tabs():
                 id="cross-tab",
                 label="CrossTaste™",
                 value="tab3",
+                className="custom-tab bg-dark",
+                selected_className="custom-tab--selected",
+            ),
+            dcc.Tab(
+                id="album-tab",
+                label="Albumator",
+                value="tab4",
                 className="custom-tab bg-dark",
                 selected_className="custom-tab--selected",
             ),
@@ -200,6 +211,8 @@ def render_content(tab):
         return tab_user()
     elif tab == 'tab3':
         return tab_cross_user()
+    elif tab == 'tab4':
+        return tab_albumator()
 
 
 # Data
@@ -209,9 +222,7 @@ def render_content(tab):
         Output("error-modal", "is_open"),
         Output("error-modal", "children"),
     ],
-    [
-        Input("spreadsheet-select", "value"),
-    ],
+    [Input("spreadsheet-select", "value")],
     [State("error-modal", "is_open")],
 )
 def get_spreadsheet_data(spreadsheet_name, err_modal):
@@ -231,52 +242,69 @@ def get_spreadsheet_data(spreadsheet_name, err_modal):
             )
         except Exception as ex:
             return {}, True, str(ex)
+
     return df.to_dict('list'), False, None
 
 
 # Data tab 1
 @app.callback([
-    Output("cardText1", "children"),
-    Output("cardText2", "children"),
-    Output("cardText3", "children"),
-], [Input("spreadsheet_data", 'modified_timestamp')],
-              [State("spreadsheet_data", 'data')])
-def update_text(ts, data):
+    Output("card-album-number", "children"),
+    Output("card-artist-number", "children"),
+    Output("card-overall-avg", "children"),
+], [
+    Input("average-select", "value"),
+    Input("spreadsheet_data", 'modified_timestamp'),
+], [State("spreadsheet_data", 'data')])
+def update_text(avg_col, ts, data):
 
     if ts is None:
         raise PreventUpdate
+
+    col = "AVG"
+    if avg_col and "WAVG" in data:
+        col = "WAVG"
 
     df = pd.DataFrame(data)
 
     return (
-        df['Album'].count(), df['Artist'].nunique(), f"{df['AVG'].mean(): .3f}"
+        df['Album'].count(), df['Artist'].nunique(), f"{df[col].mean(): .3f}"
     )
 
 
 @app.callback(
-    Output("overview_year",
-           "figure"), [Input("spreadsheet_data", 'modified_timestamp')],
-    [State("spreadsheet_data", 'data')]
+    Output("overview_year", "figure"), [
+        Input("average-select", "value"),
+        Input("spreadsheet_data", 'modified_timestamp')
+    ], [State("spreadsheet_data", 'data')]
 )
-def update_overview_year(ts, data):
+def update_overview_year(avg_col, ts, data):
 
     if ts is None:
         raise PreventUpdate
 
-    return generate_overview_year(data)
+    col = "AVG"
+    if avg_col and "WAVG" in data:
+        col = "WAVG"
+
+    return generate_overview_year(data, col)
 
 
 @app.callback(
-    Output("overview_stats",
-           "figure"), [Input("spreadsheet_data", 'modified_timestamp')],
-    [State("spreadsheet_data", 'data')]
+    Output("overview_stats", "figure"), [
+        Input("average-select", "value"),
+        Input("spreadsheet_data", 'modified_timestamp')
+    ], [State("spreadsheet_data", 'data')]
 )
-def update_overview_stats(ts, data):
+def update_overview_stats(avg_col, ts, data):
 
     if ts is None:
         raise PreventUpdate
 
-    return generate_overview_stats(data)
+    col = "AVG"
+    if avg_col and "WAVG" in data:
+        col = "WAVG"
+
+    return generate_overview_stats(data, col)
 
 
 @app.callback(
@@ -284,14 +312,19 @@ def update_overview_stats(ts, data):
         Input("spreadsheet_data", 'modified_timestamp'),
         Input("overview_year", "selectedData"),
         Input("overview_stats", "selectedData"),
+        Input("average-select", "value"),
     ], [State("spreadsheet_data", 'data')]
 )
-def update_overview_year_tbl(ts, sel_year, sel_stats, data):
+def update_overview_year_tbl(ts, sel_year, sel_stats, avg_col, data):
 
     if ts is None:
         raise PreventUpdate
 
-    return generate_overview_year_tbl(data, sel_year, sel_stats)
+    col = "AVG"
+    if avg_col and "WAVG" in data:
+        col = "WAVG"
+
+    return generate_overview_tbl(data, sel_year, sel_stats, col)
 
 
 # Data tab 2
@@ -311,9 +344,8 @@ def update_user_overview(ts, data):
 @app.callback([
     Output("user_breakdown_select", "options"),
     Output("user_breakdown_select", "value"),
-], [
-    Input("spreadsheet_data", 'modified_timestamp'),
-], [State("spreadsheet_data", 'data')])
+], [Input("spreadsheet_data", 'modified_timestamp')],
+              [State("spreadsheet_data", 'data')])
 def update_user_breakdown_value(ts, data):
 
     if ts is None:
@@ -365,6 +397,55 @@ def update_detail_taste(ts, hm_click, data):
         raise PreventUpdate
 
     return generate_crossuser_corr(data, hm_click)
+
+
+# Data tab 4
+@app.callback([
+    Output("cardText1", "children"),
+    Output("cardText2", "children"),
+], [
+    Input("spreadsheet_data", 'modified_timestamp'),
+], [State("spreadsheet_data", 'data')])
+def update_text(ts, data):
+
+    if ts is None:
+        raise PreventUpdate
+
+    stats = generate_album_stats(data)
+
+    return (
+        stats['agreed'],
+        stats['disagreed'],
+    )
+
+
+@app.callback([
+    Output("album_breakdown_select", "options"),
+    Output("album_breakdown_select", "value"),
+], [Input("spreadsheet_data", 'modified_timestamp')],
+              [State("spreadsheet_data", 'data')])
+def update_album_breakdown_value(ts, data):
+
+    if ts is None:
+        raise PreventUpdate
+
+    albums = data['Album']
+
+    return [{'label': album, "value": album} for album in albums], albums[0]
+
+
+@app.callback(
+    Output("album_breakdown", "figure"), [
+        Input("spreadsheet_data", 'modified_timestamp'),
+        Input("album_breakdown_select", "value"),
+    ], [State("spreadsheet_data", 'data')]
+)
+def update_album_breakdown(ts, albums, data):
+
+    if ts is None:
+        raise PreventUpdate
+
+    return generate_album_breakdown(data, albums)
 
 
 # Run the server

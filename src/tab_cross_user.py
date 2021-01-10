@@ -19,8 +19,7 @@ def tab_cross_user():
                             ),
                             dbc.Card(
                                 """Explore taste similarity between users. """
-                                """Click on the heatmap to see a detailed breakdown. """
-                                """Values closer to 0 mean a better taste agreement. """,
+                                """Click on the heatmap to see a detailed breakdown. """,
                                 body=True,
                                 id="intro"
                             ),

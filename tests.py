@@ -3,6 +3,8 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import requests
+import io
 
 # %%
 
@@ -40,62 +42,42 @@ crossref_adj = crossref / np.average(crossref)
 crossref_pd = pd.DataFrame(data=crossref_adj, index=users, columns=users)
 
 # %%
+from sheets import spreadsheet_list
+from src.clean_data import process_spreadsheet
 
-fig, ax = plt.subplots(figsize=(7, 7))
-im = ax.imshow(crossref_adj, cmap="inferno")
-
-# We want to show all ticks...
-ax.set_xticks(np.arange(len(users)))
-ax.set_yticks(np.arange(len(users)))
-
-# ... and label them with the respective list entries
-ax.set_xticklabels(users)
-ax.set_yticklabels(users)
-
-# Rotate the tick labels and set their alignment.
-plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
-
-# Loop over data dimensions and create text annotations.
-for i in range(len(users)):
-    for j in range(len(users)):
-        text = ax.text(
-            j,
-            i,
-            f"{crossref_adj[i, j]:.1f}",
-            ha="center",
-            va="center",
-            color="k"
-        )
-
-ax.set_title("Taste similarity")
-fig.tight_layout()
-plt.show()
-
-# %%
-import requests
-import io
-
+spreadsheet_name = 'Reliquary'
 sheets_template = "https://docs.google.com/spreadsheet/ccc?key={0}&output=csv"
-spreadsheet_list = {
-    'GOAT': "1F_7q1tP7zoy3sJKIAJa2XJ5NbyAGASvmiglSJSneh2U",
-    'Reliquary': "13T9MFuhDTuQe_21s58KcX6KiiT2w_HvfiQ9AjEbuzYM",
-    'Guts': "18se3f36hUJsTLLoXnYrxKaH_YowWk5HvzqX1jugs72w",
-}
 
-resp = requests.get(sheets_template.format(spreadsheet_list['Guts']))
+resp = requests.get(
+    sheets_template.format(spreadsheet_list[spreadsheet_name]['url'])
+)
 resp.encoding = 'UTF-8'
-df = pd.read_csv(io.StringIO(resp.text))
+df = process_spreadsheet(
+    pd.read_csv(io.StringIO(resp.text), na_values=[' ']), spreadsheet_name
+)
 
 # %%
 
-dff = df.drop([0, 1]).dropna(axis='columns', thresh=int(0.4 * len(df)))
+NONUSER_COLS = [
+    'rank', 'artist', 'album', 'year', 'day', 'lists', 'votes', 'avg', 'wavg',
+    'released', 'genre', 'label', 'rec', 'yt link'
+]
 
-# %%
-resp.encoding
+df = process_spreadsheet(
+    pd.read_csv(io.StringIO(resp.text), na_values=[' ']), spreadsheet_name
+).reset_index(drop=True)
+# df['std_dev'] = df[[
+#     col for col in df.columns if col.lower() not in NONUSER_COLS
+# ]].std(axis=1)
 
-# %%
+df['std_dev'] = df[[
+    col for col in df.columns if col.lower() not in NONUSER_COLS
+]].apply(
+    lambda x: np.std(x) if np.count_nonzero(np.isnan(x)) < 5 else np.nan,
+    axis=1
+)
 
-dff = pd.DataFrame(data)
-dff[["Released", "Artist", "Album", "AVG", "Votes"]].to_dict('records')
+top = df['std_dev'].idxmax()
+bot = df['std_dev'].idxmin()
 
 # %%

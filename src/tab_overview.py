@@ -18,7 +18,8 @@ def tab_overview():
                             html.H3("General overview of the spreadsheet"),
                             dbc.Card(
                                 """Drag to select on the top graphs, the table will update based on this selection. """
-                                """Clicking on the table headers will sort, while typing in the first row will search. """,
+                                """Clicking on the table headers will sort, while typing in the first row will search. """
+                                """Searching for numbers and dates takes ranges: ">3" means above average of 3. """,
                                 body=True,
                                 id="intro"
                             ),
@@ -37,7 +38,7 @@ def tab_overview():
                             dbc.CardBody([
                                 html.H4(
                                     "Card title",
-                                    id="cardText1",
+                                    id="card-album-number",
                                     className="card-title"
                                 ),
                                 html.P(
@@ -51,7 +52,7 @@ def tab_overview():
                             dbc.CardBody([
                                 html.H4(
                                     "Card title",
-                                    id="cardText2",
+                                    id="card-artist-number",
                                     className="card-title"
                                 ),
                                 html.P(
@@ -65,10 +66,27 @@ def tab_overview():
                             dbc.CardBody([
                                 html.H4(
                                     "Card title",
-                                    id="cardText3",
+                                    id="card-overall-avg",
                                     className="card-title"
                                 ),
-                                html.P("Vote average", className="card-text"),
+                                html.P(
+                                    children=[
+                                        "Vote average  ",
+                                        dbc.Checklist(
+                                            options=[
+                                                {
+                                                    "label": "Use wAVG?",
+                                                    "value": False
+                                                },
+                                            ],
+                                            id="average-select",
+                                            switch=True,
+                                            inline=True,
+                                            style={"display": "inline"}
+                                        ),
+                                    ],
+                                    className="card-text"
+                                ),
                             ]),
                         ]),
                     ),
@@ -116,21 +134,23 @@ def tab_overview():
                             },
                             {
                                 'id': "Votes",
-                                'name': 'No. Votes'
+                                'name': '#Votes'
                             },
                         ],
-                        style_header={'backgroundColor': 'rgb(30, 30, 30)'},
+                        style_header={'backgroundColor': palette['black']},
                         style_cell={
                             'backgroundColor': 'rgb(50, 50, 50)',
-                            'color': 'white'
+                            'color': palette['white'],
+                            'border': '1px solid black'
                         },
                         style_filter={
-                            'backgroundColor': 'rgb(185, 167, 167)',
-                            'color': 'white'
+                            'backgroundColor': palette['lblue'],
+                            'color': palette['white']
                         },
                         page_size=12,
                         sort_action='native',
                         filter_action='native',
+                        style_as_list_view=True,
                     ),
                 ),
             ],

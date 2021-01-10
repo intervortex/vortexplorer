@@ -23,10 +23,11 @@ def generate_user_breakdown(data, sel_users):
     )
 
     # format the layout
+    fig.update_xaxes(range=[0, 10])
     fig.update_layout(**graph_custom)
     fig.update_layout(
         xaxis_title='Vote',
-        yaxis_title='Vote count',
+        yaxis_title='Vote proportion',
         font=dict(family="Open Sans", color=palette['light'], size=18),
         showlegend=True,
     )

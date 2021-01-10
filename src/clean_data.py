@@ -19,16 +19,14 @@ def process_spreadsheet(df, spreadsheet_name):
             lambda x: x + '-' + spreadsheet_name
         )
 
-    if 'WAVG' in df.columns:
-        df['AVG'] = df['WAVG']
-
     return df.dropna(
         axis='columns',
-        thresh=int(spreadsheet_list[spreadsheet_name]['thresh'] * len(df))
+        thresh=min(
+            int(spreadsheet_list[spreadsheet_name]['thresh'] * len(df)), 100
+        )
     )
 
 
 def process_users(dct):
-    # print([usr for usr in dct.keys() if usr.lower() not in NONUSER_COLS])
 
     return [usr for usr in dct.keys() if usr.lower() not in NONUSER_COLS]
