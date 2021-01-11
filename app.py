@@ -202,10 +202,6 @@ app.layout = html.Div(
     [State("modal", "is_open")],
 )
 def toggle_modal(n1, n2, is_open):
-    try:
-        REDISDB.publish('discord', "We have liftoff.")
-    except:
-        pass
     if n1 or n2:
         return not is_open
     return is_open
@@ -278,11 +274,12 @@ def update_text(avg_col, ts, data):
 
 @app.callback(
     Output("overview_year", "figure"), [
+        Input("spreadsheet-select", "value"),
         Input("average-select", "value"),
         Input("spreadsheet_data", 'modified_timestamp')
     ], [State("spreadsheet_data", 'data')]
 )
-def update_overview_year(avg_col, ts, data):
+def update_overview_year(spreadsheet, avg_col, ts, data):
 
     if ts is None:
         raise PreventUpdate
@@ -291,7 +288,7 @@ def update_overview_year(avg_col, ts, data):
     if avg_col and "WAVG" in data:
         col = "WAVG"
 
-    return generate_overview_year(data, col)
+    return generate_overview_year(data, col, spreadsheet)
 
 
 @app.callback(

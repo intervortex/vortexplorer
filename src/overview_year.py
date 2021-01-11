@@ -6,7 +6,7 @@ import pandas as pd
 from src.palette import palette, graph_custom
 
 
-def generate_overview_year(data, column="AVG"):
+def generate_overview_year(data, column="AVG", spreadsheet=""):
 
     dff = pd.DataFrame({key: data[key] for key in [column, "Released"]})
 
@@ -30,7 +30,7 @@ def generate_overview_year(data, column="AVG"):
     except ValueError as e:
         dff = pd.DataFrame({column: [], "Released": []})
         from app import REDISDB
-        REDISDB.publish('discord', str(e))
+        REDISDB.publish('discord', f"A problem in '{spreadsheet}':\n{e}")
 
     data = [
         dict(

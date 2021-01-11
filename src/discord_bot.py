@@ -21,7 +21,7 @@ class disc_bot(discord.Client):
         print(f'{self.user} has connected to Discord!')
         for chan in self.get_all_channels():
             print(chan.name)
-            if chan.name == 'general':
+            if chan.name == 'techxplorer':
                 self.broadcast_chan = chan
                 print(f"found channel {chan}")
 
