@@ -31,9 +31,15 @@ class disc_bot(discord.Client):
 
         if message.content.startswith('!testbot'):
             await message.reply('I am working!', mention_author=True)
+            return
 
         if message.content.startswith('!fucksnyde'):
             await message.reply('Yeah, fuck Snyde!', mention_author=False)
+            return
+
+        if message.content.startswith('(╯°□°）╯︵ ┻━┻'):
+            await message.reply('┬─┬ ノ( ゜-゜ノ)', mention_author=False)
+            return
 
     async def print(self, text):
         if self.broadcast_chan:
