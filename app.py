@@ -12,10 +12,11 @@ from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
 # Connect to redis if possible
+REDISDB = None
 try:
     import redis
     redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
-    r = redis.from_url(redis_url)
+    REDISDB = redis.from_url(redis_url)
 except:
     pass
 
@@ -202,8 +203,7 @@ app.layout = html.Div(
 )
 def toggle_modal(n1, n2, is_open):
     try:
-        print("Sending to redis.")
-        r.publish('discord', "We have liftoff.")
+        REDISDB.publish('discord', "We have liftoff.")
     except:
         pass
     if n1 or n2:

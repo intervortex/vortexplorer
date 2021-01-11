@@ -14,13 +14,16 @@ def generate_overview_tbl(data, sel_year, sel_stats, column="AVG"):
         )
     })
 
-    year_fmt = "%Y"
+    format = "%b-%d-%Y"
+    year_fmt = '%b-%m'
+    if len(str(dff['Released'].iloc[0])) == 4:
+        format = "%Y"
+        year_fmt = "%Y"
 
     try:
-        dff["Released"] = pd.to_datetime(dff["Released"], format="%Y")
+        dff["Released"] = pd.to_datetime(dff["Released"], format=format)
     except:
-        year_fmt = '%b-%m'
-        dff["Released"] = pd.to_datetime(dff["Released"], format="%b-%d-%Y")
+        dff = pd.DataFrame({column: [], "Released": []})
 
     if sel_year is not None:
         one = datetime.strptime(sel_year["range"]['x'][1][:10], "%Y-%m-%d")

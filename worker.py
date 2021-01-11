@@ -10,17 +10,13 @@ botty = disc_bot()
 
 async def reader(chan):
     while (await chan.wait_message()):
-        msg = await chan.get()
-        print(msg)
+        msg = await chan.get(encoding="utf-8")
         await botty.print(msg)
 
 
 async def listen_redis():
-    await botty.wait_until_ready()
 
-    print("going for the listen thing")
-    await botty.print("Starting to listen.")
-    print("back from the listen thing")
+    await botty.wait_until_ready()
 
     r = await aioredis.create_redis(redis_url)
     res = await r.subscribe('discord')
@@ -31,7 +27,6 @@ async def listen_redis():
     # # gracefully closing underlying connection
     r.close()
     await r.wait_closed()
-    print("all finished")
 
 
 if __name__ == '__main__':
