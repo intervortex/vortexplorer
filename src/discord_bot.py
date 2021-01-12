@@ -1,5 +1,21 @@
 import os
 import discord
+import random
+
+TOPSTER = [
+    "That's just like, your opinion, man...",
+    "Might as well add Cardi B to that list.",
+    "Good stuff, shame the design sucks balls.",
+    "Don't 👏 talk 👏 about 👏 your 👏 topster 👏 unless 👏 Emily Montes is #1 👏",
+    "You should probably reconsider your music taste.",
+    "I'd rather hang myself than hang that on my wall.",
+    "🙄🙄🙄🙄",
+    "🙄🙄🙄🙄",
+    "Topstop already",
+    "More like STOPster.",
+    "no u",
+    "no u",
+]
 
 
 class disc_bot(discord.Client):
@@ -37,8 +53,12 @@ class disc_bot(discord.Client):
             await message.reply('Yeah, fuck Snyde!', mention_author=False)
             return
 
-        if message.content.startswith('(╯°□°）╯︵ ┻━┻'):
+        if message.content.contains('(╯°□°）╯︵ ┻━┻'):
             await message.reply('┬─┬ ノ( ゜-゜ノ)', mention_author=False)
+            return
+
+        if message.content.lower().contains('topster'):
+            await message.reply(random.choice(TOPSTER), mention_author=False)
             return
 
     async def print(self, text):
