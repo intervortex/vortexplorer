@@ -53,11 +53,11 @@ class disc_bot(discord.Client):
             await message.reply('Yeah, fuck Snyde!', mention_author=False)
             return
 
-        if message.content.contains('(╯°□°）╯︵ ┻━┻'):
+        if '(╯°□°）╯︵ ┻━┻' in message.content:
             await message.reply('┬─┬ ノ( ゜-゜ノ)', mention_author=False)
             return
 
-        if message.content.lower().contains('topster'):
+        if 'topster' in message.content.lower():
             await message.reply(random.choice(TOPSTER), mention_author=False)
             return
 
