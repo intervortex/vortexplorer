@@ -15,6 +15,9 @@ TOPSTER = [
     "More like STOPster.",
     "no u",
     "no u",
+    "Graphic design masterclass, obviously.",
+    "I wish those bands put as much care into the album cover as you put in this topster.",
+    "Good thing I'm a bot, otherwise that music would offend me.",
 ]
 
 
