@@ -20,6 +20,20 @@ TOPSTER = [
     "Good thing I'm a bot, otherwise that music would offend me.",
 ]
 
+NUMBERS = {
+    0: "0️⃣",
+    1: "1️⃣",
+    2: "2️⃣",
+    3: "3️⃣",
+    4: "4️⃣",
+    5: "5️⃣",
+    6: "6️⃣",
+    7: "7️⃣",
+    8: "8️⃣",
+    9: "9️⃣",
+    10: "🔟",
+}
+
 
 class disc_bot(discord.Client):
 
@@ -76,10 +90,19 @@ class disc_bot(discord.Client):
             return
 
         if message.content.lower().startswith('np'):
-            if random.random() < 0.5:
-                await message.add_reaction("🚮")
-            elif self.react_yngw and random.random() < 0.3:
-                await message.add_reaction(self.react_yngw)
+            if random.random() < 0.7:
+
+                grade = random.randrange(1, 10)
+
+                if random.random() < 0.6:
+                    await message.add_reaction(NUMBERS[grade])
+
+                if grade < 5 and random.random() < 0.7:
+                    await message.add_reaction("🚮")
+
+                elif grade > 5 and random.random() < 0.5 and self.react_yngw:
+                    await message.add_reaction(self.react_yngw)
+
             return
 
     async def print(self, text):
