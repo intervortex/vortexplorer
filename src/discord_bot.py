@@ -45,12 +45,14 @@ class disc_bot(discord.Client):
             self.guilds,
             name='Interdimensional Vortex of Conspiratorial Tastemaking'
         )
+        print(f"Found Vortex {self.GUILD.name}")
         self.broadcast_chan = discord.utils.get(
             self.GUILD.text_channels, name='techxplorer'
         )
-        self.react_litter = discord.utils.get(
-            self.GUILD.emojis, name='put_litter_in_its_place'
-        )
+        print(f"Found broadcast channel {self.broadcast_chan.name}")
+        # self.react_litter = discord.utils.get(
+        #     self.GUILD.emojis, name='put_litter_in_its_place'
+        # )
         self.react_yngw = discord.utils.get(self.GUILD.emojis, name='yngwie2')
 
     async def on_message(self, message):
@@ -74,8 +76,8 @@ class disc_bot(discord.Client):
             return
 
         if message.content.lower().startswith('np'):
-            if self.react_litter and random.random() < 0.5:
-                await message.add_reaction(self.react_litter)
+            if random.random() < 0.5:
+                await message.add_reaction("🚮")
             elif self.react_yngw and random.random() < 0.3:
                 await message.add_reaction(self.react_yngw)
             return
