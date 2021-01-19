@@ -26,6 +26,8 @@ class disc_bot(discord.Client):
     TOKEN = None
     GUILD = None
     broadcast_chan = None
+    react_litter = None
+    react_yngw = None
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -38,11 +40,14 @@ class disc_bot(discord.Client):
 
     async def on_ready(self):
         print(f'{self.user} has connected to Discord!')
-        for chan in self.get_all_channels():
-            print(chan.name)
-            if chan.name == 'techxplorer':
-                self.broadcast_chan = chan
-                print(f"found channel {chan}")
+        self.GUILD = discord.utils.get(self.guilds, id='455816212622999553')
+        self.broadcast_chan = discord.utils.get(
+            self.GUILD.text_channels, name='techxplorer'
+        )
+        self.react_litter = discord.utils.get(
+            self.GUILD.emojis, name='put_litter_in_its_place'
+        )
+        self.react_yngw = discord.utils.get(self.GUILD.emojis, name='yngwie2')
 
     async def on_message(self, message):
         if message.author.id == self.user.id:
@@ -52,7 +57,7 @@ class disc_bot(discord.Client):
             await message.reply('I am working!', mention_author=True)
             return
 
-        if message.content.startswith('!fucksnyde'):
+        if 'fuck snyde' in message.content.lower():
             await message.reply('Yeah, fuck Snyde!', mention_author=False)
             return
 
@@ -62,6 +67,13 @@ class disc_bot(discord.Client):
 
         if 'topster' in message.content.lower():
             await message.reply(random.choice(TOPSTER), mention_author=False)
+            return
+
+        if message.content.lower().startswith('np'):
+            if self.react_litter and random.random() < 0.5:
+                await message.add_reaction(self.react_litter)
+            elif self.react_yngw and random.random < 0.3:
+                await message.add_reaction(self.react_yngw)
             return
 
     async def print(self, text):
