@@ -76,7 +76,7 @@ class disc_bot(discord.Client):
         if message.content.lower().startswith('np'):
             if self.react_litter and random.random() < 0.5:
                 await message.add_reaction(self.react_litter)
-            elif self.react_yngw and random.random < 0.3:
+            elif self.react_yngw and random.random() < 0.3:
                 await message.add_reaction(self.react_yngw)
             return
 
