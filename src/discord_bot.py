@@ -100,7 +100,7 @@ class disc_bot(discord.Client):
                 if grade < 5 and random.random() < 0.7:
                     await message.add_reaction("🚮")
 
-                elif grade > 5 and random.random() < 0.5 and self.react_yngw:
+                elif grade > 6 and random.random() < 0.5 and self.react_yngw:
                     await message.add_reaction(self.react_yngw)
 
             return
