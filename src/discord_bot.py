@@ -40,7 +40,11 @@ class disc_bot(discord.Client):
 
     async def on_ready(self):
         print(f'{self.user} has connected to Discord!')
-        self.GUILD = discord.utils.get(self.guilds, id='455816212622999553')
+        print()
+        self.GUILD = discord.utils.get(
+            self.guilds,
+            name='Interdimensional Vortex of Conspiratorial Tastemaking'
+        )
         self.broadcast_chan = discord.utils.get(
             self.GUILD.text_channels, name='techxplorer'
         )
