@@ -1,5 +1,5 @@
-@import 'css/_variables.css';
-@import 'css/_fonts.css';
+@import '_variables.css';
+@import '_fonts.css';
 
 body {
     background-color: var(--black);

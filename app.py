@@ -44,13 +44,11 @@ app = dash.Dash(
         "content": "width=device-width, initial-scale=1"
     }],
     external_stylesheets=[dbc.themes.DARKLY],
-    assets_ignore='_*'
 )
 
 server = app.server
 app.title = "Vortexplorer"
 app.config.suppress_callback_exceptions = True
-app.scripts.config.serve_locally = False
 app.index_string = '''
 <!DOCTYPE html>
 <html>
