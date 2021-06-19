@@ -210,6 +210,7 @@ app.layout = html.Div(
                 dbc.Row(dbc.Col(build_tabs(), )),
                 dbc.Row(dbc.Col(id="app-content")),
                 dbc.Modal(id="error-modal"),
+                dbc.Row(style={"height": "50px"}),
             ],
         ),
     ],
