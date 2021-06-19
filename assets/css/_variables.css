@@ -1,0 +1,13 @@
+:root {
+    /* Dark Colors */
+    --primary: rgb(213, 152, 87) !important;
+    --highlight: rgb(250, 231, 167) !important;
+    --primary-dark: rgb(221, 223, 224) !important;
+    --white: rgba(255, 255, 255, 1) !important;
+    --off-white: rgb(248, 255, 244) !important;
+    --grey-1: rgb(177, 182, 166) !important;
+    --grey-2: rgb(140, 140, 140) !important;
+    --grey-3: rgb(105, 103, 115) !important;
+    --grey-4: rgb(54, 57, 70) !important;
+    --black: rgb(27, 29, 35) !important;
+}

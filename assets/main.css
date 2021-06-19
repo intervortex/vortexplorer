@@ -1,0 +1,45 @@
+@import 'css/_variables.css';
+@import 'css/_fonts.css';
+
+body {
+    background-color: var(--black);
+}
+
+/* App tabs */
+
+#app-tabs .tab--selected {
+    color: var(--primary) !important;
+    border-top-color: var(--primary) !important;
+}
+
+/* Dropdowns */
+
+.Select-control {
+    color: var(--grey-1);
+}
+
+.Select {
+    color: var(--grey-1);
+}
+
+.Select-menu-outer {
+    background-color: var(--grey-4);
+    border: 1px solid var(--grey-1);
+}
+
+.Select div {
+    background-color: var(--grey-4);
+}
+
+.Select-menu-outer div:hover {
+    background-color: rgba(255, 255, 255, 0.01);
+}
+
+.Select-value-label {
+    color: var(--grey-1) !important;
+}
+
+.Select--single > .Select-control .Select-value, .Select-placeholder {
+    border: 1px solid var(--grey-2);
+    border-radius: 4px;
+}
