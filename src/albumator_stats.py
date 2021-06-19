@@ -57,7 +57,7 @@ def generate_album_breakdown(data, albums):
     fig.update_layout(
         xaxis_title='Vote',
         yaxis_title='Vote proportion',
-        font=dict(family="Open Sans", color=palette['light'], size=18),
+        font=dict(color=palette['light'], size=18),
         showlegend=True,
     )
 

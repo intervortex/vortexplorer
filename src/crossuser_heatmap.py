@@ -109,14 +109,14 @@ def generate_crossuser_heatmap(data_df, users, hm_click, reset, column="AVG"):
                 side="top",
                 ticks="",
                 ticklen=2,
-                tickfont=dict(family="sans-serif", color=palette['light']),
+                tickfont=dict(color=palette['light']),
                 tickcolor=palette['light'],
             ),
             yaxis=dict(
                 side="left",
                 ticks="",
                 ticklen=2,
-                tickfont=dict(family="sans-serif", color=palette['light']),
+                tickfont=dict(color=palette['light']),
                 ticksuffix="",
                 tickcolor=palette['light'],
                 autorange="reversed"

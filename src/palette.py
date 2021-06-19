@@ -16,7 +16,7 @@ graph_custom = dict(
     ),
     font=dict(
         family=
-        "Lato, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol",
+        "B612, Lato, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol",
         color=palette['white'],
     ),
     paper_bgcolor=palette['black'],

@@ -44,12 +44,33 @@ app = dash.Dash(
         "content": "width=device-width, initial-scale=1"
     }],
     external_stylesheets=[dbc.themes.DARKLY],
+    assets_ignore='_*'
 )
 
 server = app.server
 app.title = "Vortexplorer"
 app.config.suppress_callback_exceptions = True
 app.scripts.config.serve_locally = False
+app.index_string = '''
+<!DOCTYPE html>
+<html>
+    <head>
+        {%metas%}
+         <link href="https://fonts.googleapis.com/css?family=B612:400,700" rel="stylesheet">
+        <title>{%title%}</title>
+        {%favicon%}
+        {%css%}
+    </head>
+    <body>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </footer>
+    </body>
+</html>
+'''
 
 # Offline mode (no G Sheets) and paths of offline data, for testing
 OFFLINE = False
@@ -62,10 +83,20 @@ DATA_PATH = BASE_PATH.joinpath("data").resolve()
 
 
 def header():
-    return dbc.NavbarSimple(
+    return dbc.Row(
+        justify="center",
+        align="center",
+        style={
+            "height": "100px",
+            "margin-top": "50px",
+        },
         children=[
-            dbc.NavItem(dbc.NavLink("Select Spreadsheet", href="#")),
-            dbc.NavItem(
+            dbc.Col(
+                dbc.Label("Select Spreadsheet"),
+                className="col-4",
+                style={'text-align': 'right'},
+            ),
+            dbc.Col(
                 dcc.Dropdown(
                     id="spreadsheet-select",
                     options=[{
@@ -74,11 +105,11 @@ def header():
                     } for i in sheets_list],
                     value=next(iter(sheets_list)),
                     persistence=True,
-                    persistence_type="local"
+                    persistence_type="local",
                 ),
-                style={"width": "200px"},
+                className="col-4"
             ),
-            dbc.NavItem(dbc.Button('Halp', id='open')),
+            dbc.Col(dbc.Button('Halp', id='open'), className="col-4"),
             dbc.Modal(
                 [
                     dbc.ModalHeader("This is the Vortexplorer."),
@@ -127,12 +158,6 @@ def header():
                 centered=True,
             ),
         ],
-        brand=app.title,
-        brand_href="#",
-        color="primary",
-        dark=True,
-        fixed='top',
-        sticky='sticky',
     )
 
 
@@ -180,15 +205,14 @@ app.layout = html.Div(
     id="outer-wrapper",
     children=[
         dcc.Store(id="spreadsheet_data"),
-        header(),
         dbc.Container(
             id="app-container",
             children=[
+                header(),
                 dbc.Row(dbc.Col(build_tabs(), )),
                 dbc.Row(dbc.Col(id="app-content")),
                 dbc.Modal(id="error-modal"),
             ],
-            style={'margin-top': "100px"}
         ),
     ],
 )
