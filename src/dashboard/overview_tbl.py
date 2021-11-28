@@ -14,14 +14,8 @@ def generate_overview_tbl(data, sel_year, sel_stats, column="AVG"):
         )
     })
 
-    format = "%b-%d-%Y"
-    year_fmt = '%b-%m'
-    if len(str(dff['Released'].iloc[0])) == 4:
-        format = "%Y"
-        year_fmt = "%Y"
-
     try:
-        dff["Released"] = pd.to_datetime(dff["Released"], format=format)
+        dff["Released"] = pd.to_datetime(dff["Released"])
     except:
         dff = pd.DataFrame({column: [], "Released": []})
 
@@ -38,5 +32,5 @@ def generate_overview_tbl(data, sel_year, sel_stats, column="AVG"):
         end = sel_stats["range"]['x'][1]
         dff = dff[dff[column].between(start, end)]
 
-    dff['Released'] = dff['Released'].apply(lambda x: x.strftime(year_fmt))
+    dff['Released'] = dff['Released'].apply(lambda x: x.strftime("%Y-%m-%d"))
     return dff.to_dict('records')
