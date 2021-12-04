@@ -2,7 +2,10 @@ import pandas as pd
 
 from data.sheets import sheets_list
 
-NONUSER_COLS = ['rank', 'artist', 'album', 'year', 'day', 'lists', 'votes', 'avg', 'wavg', 'released', 'genre', 'label', 'rec', 'yt link']
+NONUSER_COLS = [
+    'rank', 'artist', 'album', 'year', 'day', 'lists', 'votes', 'avg', 'wavg', 'released', 'genre',
+    'label', 'rec', 'yt link'
+]
 
 
 def process_spreadsheet(df, spreadsheet_name):
@@ -13,11 +16,20 @@ def process_spreadsheet(df, spreadsheet_name):
     # Standardize time column and remove unneeded columns
     df = df.rename(columns={sheet['time_col']: 'Released'}, ).drop(sheet['header_remove'])
 
+    # check time for any problems
+    is_NaN = df['Released'].isnull()
+    row_has_NaN = is_NaN.any()
+    if row_has_NaN:
+        rows_with_NaN = df[is_NaN]
+        from src.notifications import notify
+        notify(f"Malformed date rows in <{spreadsheet_name}>:\n{rows_with_NaN[['Artist','Album']]}")
+        return pd.DataFrame(columns=NONUSER_COLS)
+
     # Append year to column with no release date
     fmt = "%Y"
     if sheet['time_col'] == 'Released':
         fmt = "%b-%d-%Y"
-        df['Released'] = df['Released'].apply(lambda x: x + '-' + spreadsheet_name)
+        df['Released'] = df['Released'].apply(lambda x: str(x) + '-' + spreadsheet_name)
 
     # Format time correctly
     try:
@@ -25,7 +37,7 @@ def process_spreadsheet(df, spreadsheet_name):
 
     except ValueError as e:
         from src.notifications import notify
-        notify(f"A date problem in '{spreadsheet_name}':\n{e}")
+        notify(f"Cannot convert date in <{spreadsheet_name}>:\n{e}")
         return pd.DataFrame(columns=NONUSER_COLS)
 
     # Drop votes from users which have not voted enough
@@ -36,7 +48,9 @@ def process_spreadsheet(df, spreadsheet_name):
     duplicates = df.duplicated(subset=['Artist', 'Album'])
     if any(duplicates):
         from src.notifications import notify
-        notify(f"Duplicate albums in {spreadsheet_name}: {df[duplicates][['Artist', 'Album']].values}")
+        notify(
+            f"Duplicate albums in {spreadsheet_name}: {df[duplicates][['Artist', 'Album']].values}"
+        )
 
     return df
 
