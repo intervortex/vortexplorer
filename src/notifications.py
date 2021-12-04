@@ -1,4 +1,7 @@
 import logging
+import random
+
+BLAME = ("Snyde", "ferday", "Tarbs")
 
 
 def notify_discord(message: str) -> None:
@@ -10,5 +13,6 @@ def notify_discord(message: str) -> None:
 
 def notify(message: str) -> None:
     """Notify using all available channels."""
+    message = message + "\nBlame " + random.choice(BLAME)
     notify_discord(message)
     logging.error(message)
