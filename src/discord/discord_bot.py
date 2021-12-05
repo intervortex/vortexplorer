@@ -71,7 +71,7 @@ class disc_bot(discord.Client):
             return
 
         if not message.guild:
-            await message.channel.send('this is a dm')
+            await self.print(message.content)
             return
 
         if message.content.startswith('!testbot'):
@@ -108,7 +108,6 @@ class disc_bot(discord.Client):
 
     async def print(self, text):
         if self.broadcast_chan:
-            print(self.broadcast_chan)
             await self.broadcast_chan.send(text)
 
     def run_loop(self):
