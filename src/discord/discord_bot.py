@@ -56,13 +56,10 @@ class disc_bot(discord.Client):
         print(f'{self.user} has connected to Discord!')
         print()
         self.GUILD = discord.utils.get(
-            self.guilds,
-            name='Interdimensional Vortex of Conspiratorial Tastemaking'
+            self.guilds, name='Interdimensional Vortex of Conspiratorial Tastemaking'
         )
         print(f"Found Vortex {self.GUILD.name}")
-        self.broadcast_chan = discord.utils.get(
-            self.GUILD.text_channels, name='techxplorer'
-        )
+        self.broadcast_chan = discord.utils.get(self.GUILD.text_channels, name='techxplorer')
         print(f"Found broadcast channel {self.broadcast_chan.name}")
         # self.react_litter = discord.utils.get(
         #     self.GUILD.emojis, name='put_litter_in_its_place'
@@ -71,6 +68,10 @@ class disc_bot(discord.Client):
 
     async def on_message(self, message):
         if message.author.id == self.user.id:
+            return
+
+        if not message.guild:
+            await message.channel.send('this is a dm')
             return
 
         if message.content.startswith('!testbot'):
