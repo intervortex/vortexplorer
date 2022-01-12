@@ -3,6 +3,12 @@ sheets_template = "https://docs.google.com/spreadsheet/ccc?key={0}&output=csv"
 
 # A list of G sheets
 sheets_list = {
+    '2022': {
+        'url': "1TZ6JzeC-BxUSwSbwaNvTfUGz0J4CVd3oCPVduLJzDLg",
+        'header_remove': [0, 1],
+        'thresh': 0.1,
+        'time_col': 'Released',
+    },
     '2021': {
         'url': "1I9OAFHol_LMXua0rmSl2yFiOkHDrgMHETrgL7NXYCsA",
         'header_remove': [0, 1],
