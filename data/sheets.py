@@ -14,6 +14,7 @@ sheets_list = {
         'header_remove': [0, 1],
         'thresh': 0.3,
         'time_col': 'Year',
+        'main_col': 'Song',
     },
     '2021': {
         'url': "1I9OAFHol_LMXua0rmSl2yFiOkHDrgMHETrgL7NXYCsA",
