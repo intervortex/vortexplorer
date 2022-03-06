@@ -11,7 +11,7 @@ sheets_list = {
     },
     'RSCC': {
         'url': "11RuUuH_40HPF5qQ0n8oTSqLhIia6JNMI89Cf6xiPqP4",
-        'header_remove': [0, 1, 2],
+        'header_remove': [0, 1],
         'thresh': 0.3,
         'time_col': 'Year',
     },
