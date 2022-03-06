@@ -14,7 +14,13 @@ def process_spreadsheet(df, spreadsheet_name):
     sheet = sheets_list[spreadsheet_name]
 
     # Standardize time column and remove unneeded columns
-    df = df.rename(columns={sheet['time_col']: 'Released'}, ).drop(sheet['header_remove'])
+    df = df.rename(
+        columns={
+            sheet.get('time_col'): 'Released',
+            sheet.get('main_col', "Album"): 'Album',
+        },
+    ).drop(sheet['header_remove'])
+
 
     # check time for any problems
     is_NaN = df['Released'].isnull()
