@@ -9,6 +9,12 @@ sheets_list = {
         'thresh': 0.1,
         'time_col': 'Released',
     },
+    'RSCC': {
+        'url': "11RuUuH_40HPF5qQ0n8oTSqLhIia6JNMI89Cf6xiPqP4",
+        'header_remove': [0, 1, 2],
+        'thresh': 0.3,
+        'time_col': 'Year',
+    },
     '2021': {
         'url': "1I9OAFHol_LMXua0rmSl2yFiOkHDrgMHETrgL7NXYCsA",
         'header_remove': [0, 1],
