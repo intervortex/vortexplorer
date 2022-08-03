@@ -176,7 +176,9 @@ def get_spreadsheet_data(spreadsheet_name, err_modal):
         try:
             resp = requests.get(get_sheet_csv(spreadsheet_name))
             resp.encoding = 'UTF-8'
-            df = process_spreadsheet(pd.read_csv(io.StringIO(resp.text), na_values=[' ']), spreadsheet_name)
+            df = process_spreadsheet(
+                pd.read_csv(io.StringIO(resp.text), na_values=[' ']), spreadsheet_name
+            )
         except Exception as ex:
             from src.notifications import notify
             notify(str(ex))
