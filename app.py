@@ -15,7 +15,7 @@ import dash_bootstrap_components as dbc
 REDIS = None
 try:
     import redis
-    redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
+    redis_url = os.getenv('REDISCLOUD_URL', 'redis://localhost:6379')
     REDIS = redis.from_url(redis_url)
     REDIS.ping()
 except:
