@@ -46,8 +46,8 @@ class disc_bot(discord.Client):
     intents = discord.Intents.default()
     intents.message_content = True
 
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(self.intents, *args, **kwargs)
+    def __init__(self) -> None:
+        super().__init__(self.intents)
 
         try:
             self.TOKEN = os.environ['DISCORD_TOKEN']
