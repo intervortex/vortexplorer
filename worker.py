@@ -6,7 +6,7 @@ from src.discord.discord_bot import disc_bot, intents
 REDIS_URL = os.getenv('REDISCLOUD_URL', 'redis://localhost:6379')
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 
-botty = disc_bot(intents)
+botty = disc_bot(intents=intents)
 
 
 async def reader(chan):
