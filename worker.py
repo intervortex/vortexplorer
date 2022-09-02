@@ -17,6 +17,10 @@ async def reader(chan):
 
 async def listen_redis():
 
+    # start the client
+    async with botty:
+        await botty.start(DISCORD_TOKEN)
+
     await botty.wait_until_ready()
 
     r = await aioredis.create_redis(REDIS_URL)
@@ -31,5 +35,4 @@ async def listen_redis():
 
 
 if __name__ == '__main__':
-    botty.loop.create_task(listen_redis())
-    botty.run(DISCORD_TOKEN)
+    asyncio.run(listen_redis())
