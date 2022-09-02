@@ -1,10 +1,10 @@
 import os
 import aioredis
 import asyncio
-from src.discord.discord_bot import disc_bot
+from src.discord.discord_bot import disc_bot, intents
 
 redis_url = os.getenv('REDISCLOUD_URL', 'redis://localhost:6379')
-botty = disc_bot()
+botty = disc_bot(intents)
 
 
 async def reader(chan):
