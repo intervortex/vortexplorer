@@ -3,7 +3,7 @@ import aioredis
 import asyncio
 from src.discord.discord_bot import disc_bot
 
-redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
+redis_url = os.getenv('REDISCLOUD_URL', 'redis://localhost:6379')
 botty = disc_bot()
 
 
