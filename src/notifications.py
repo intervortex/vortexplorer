@@ -8,6 +8,7 @@ def notify_discord(message: str) -> None:
     """Publish a message to Discord."""
     from app import REDIS
     if REDIS:
+        logging.error(f"publishing to redis: {message}")
         REDIS.publish('discord', message)
 
 
