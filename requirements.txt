@@ -1,5 +1,5 @@
 gunicorn
-dash==2.6
+dash==2.15.0
 plotly==5.10
 dash_bootstrap_components>=1.0
 requests>=2.26
